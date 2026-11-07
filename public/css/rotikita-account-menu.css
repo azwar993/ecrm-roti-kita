@@ -1,0 +1,62 @@
+/* Account dropdown inspired by the reference site. Keeps RotiKita's existing palette. */
+.rks-account-menu { position: relative; flex: 0 0 auto; }
+.rks-account-trigger {
+    display: inline-flex; align-items: center; gap: 10px; min-height: 46px; max-width: 258px;
+    padding: 6px 11px 6px 7px; color: var(--rks-espresso); background: #fffdf9;
+    border: 1px solid var(--rks-line); border-radius: 14px; cursor: pointer;
+    font: inherit; font-size: 12px; font-weight: 850; transition: border-color .15s, box-shadow .15s, background .15s;
+}
+.rks-account-trigger:hover, .rks-account-trigger[aria-expanded="true"] {
+    background: #fff8f1; border-color: #d8b49f; box-shadow: 0 5px 16px rgba(65,43,31,.06);
+}
+.rks-account-trigger:focus-visible, .rks-account-item:focus-visible { outline: 2px solid rgba(201,109,76,.58); outline-offset: 2px; }
+.rks-account-avatar {
+    display: inline-grid; width: 32px; height: 32px; flex: 0 0 32px; place-items: center;
+    color: var(--rks-terracotta-dark); background: #f4e4d7; border-radius: 50%;
+}
+.rks-account-avatar svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.rks-account-name { overflow: hidden; max-width: 150px; text-overflow: ellipsis; white-space: nowrap; }
+.rks-account-chevron { width: 15px; height: 15px; flex: 0 0 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform .15s; }
+.rks-account-trigger[aria-expanded="true"] .rks-account-chevron { transform: rotate(180deg); }
+.rks-account-dropdown {
+    position: absolute; z-index: 80; top: calc(100% + 11px); right: 0; width: min(310px, calc(100vw - 28px));
+    padding: 9px; color: var(--rks-espresso); background: #fffdf9; border: 1px solid var(--rks-line);
+    border-radius: 17px; box-shadow: 0 22px 55px rgba(53,37,31,.17); animation: rks-account-in .13s ease-out;
+}
+.rks-account-dropdown[hidden] { display: none !important; }
+.rks-account-summary { display: flex; align-items: center; gap: 11px; padding: 10px 10px 14px; }
+.rks-account-avatar-large { width: 41px; height: 41px; flex-basis: 41px; }
+.rks-account-avatar-large svg { width: 22px; height: 22px; }
+.rks-account-summary-text { display: flex; min-width: 0; flex-direction: column; gap: 3px; }
+.rks-account-summary-text strong { overflow: hidden; color: var(--rks-espresso); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.rks-account-summary-text span { overflow: hidden; color: var(--rks-muted); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.rks-account-summary-text small { color: var(--rks-terracotta-dark); font-size: 9px; font-weight: 800; }
+.rks-account-section-label { margin: 7px 10px 5px; color: #a18e7f; font-size: 9px; font-weight: 900; letter-spacing: .14em; }
+.rks-account-item {
+    display: flex; width: 100%; min-height: 40px; align-items: center; gap: 11px; padding: 9px 10px;
+    color: #5c473a; background: transparent; border: 0; border-radius: 10px; font: inherit;
+    font-size: 11px; font-weight: 700; text-align: left; text-decoration: none; cursor: pointer;
+}
+.rks-account-item:hover { color: var(--rks-terracotta-dark); background: #f8eee5; text-decoration: none; }
+.rks-account-item svg { width: 16px; height: 16px; flex: 0 0 16px; fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; }
+.rks-account-divider { height: 1px; margin: 8px 3px; background: var(--rks-line); }
+.rks-account-logout { margin: 0; }
+.rks-account-item-danger { color: #a94f3c; }
+.rks-account-item-danger:hover { color: #9c3f2f; background: #fff0ea; }
+@keyframes rks-account-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 760px) {
+    .rks-account-trigger { min-height: 38px; gap: 7px; padding: 4px 8px 4px 5px; border-radius: 12px; }
+    .rks-account-avatar { width: 28px; height: 28px; flex-basis: 28px; }
+    .rks-account-avatar svg { width: 17px; height: 17px; }
+    .rks-account-name { max-width: 96px; font-size: 10px; }
+    .rks-account-chevron { width: 13px; height: 13px; flex-basis: 13px; }
+    .rks-account-dropdown { top: calc(100% + 8px); }
+}
+@media (max-width: 390px) {
+    .rks-account-name { display: none; }
+    .rks-account-trigger { padding-right: 6px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .rks-account-dropdown { animation: none; }
+    .rks-account-chevron { transition: none; }
+}

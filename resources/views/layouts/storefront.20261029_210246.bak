@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="theme-color" content="#f8f3ea">
+    <title>@yield('title', 'Toko Roti') · RotiKita</title>
+    <link rel="stylesheet" href="{{ asset('css/rotikita.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/rotikita-storefront.css') }}">
+    @stack('styles')
+</head>
+<body class="rks-page">
+@php
+    $storeCart = session('rotikita_cart', []);
+    $storeCartCount = is_array($storeCart) ? array_sum(array_map('intval', $storeCart)) : 0;
+@endphp
+<header class="rks-header">
+    <div class="rks-header-inner">
+        <a class="rks-brand" href="{{ route('home') }}" aria-label="RotiKita beranda">
+            <span class="rks-brand-mark" aria-hidden="true">R</span>
+            <span class="rks-brand-name">RotiKita<span>.</span><small>BAKERY & CAFE</small></span>
+        </a>
+
+        <button class="rks-mobile-menu-button" type="button" data-nav-toggle aria-expanded="false" aria-controls="rks-main-nav" aria-label="Buka navigasi">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+        </button>
+
+        <nav class="rks-nav" id="rks-main-nav" aria-label="Navigasi utama">
+            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'is-active' : '' }}">Beranda</a>
+            <a href="{{ route('storefront.menu') }}" class="{{ request()->routeIs('storefront.menu') ? 'is-active' : '' }}">Menu roti</a>
+            <a href="{{ route('customer.cart') }}" class="rks-cart-link {{ request()->routeIs('customer.cart*') ? 'is-active' : '' }}">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 10.1a2 2 0 0 0 2 1.6h8.5a2 2 0 0 0 1.9-1.4L22 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>
+                Keranjang <span class="rks-cart-count">{{ $storeCartCount }}</span>
+            </a>
+        </nav>
+
+        <div class="rks-header-actions">
+            @auth
+                <a class="rks-btn rks-btn-light" href="{{ route('dashboard') }}">Dashboard <span aria-hidden="true">↗</span></a>
+                <form method="POST" action="{{ route('logout') }}">@csrf<button class="rks-btn rks-btn-quiet" type="submit">Keluar</button></form>
+            @else
+                <a class="rks-login-link" href="{{ route('login') }}">Masuk</a>
+                <a class="rks-btn rks-btn-primary" href="{{ route('register') }}">Daftar akun <span aria-hidden="true">→</span></a>
+            @endauth
+        </div>
+    </div>
+</header>
+
+@if (session('success'))
+    <div class="rks-flash-wrap"><div class="rks-flash" role="status">{{ session('success') }}</div></div>
+@endif
+@if ($errors->any())
+    <div class="rks-flash-wrap"><div class="rks-flash rks-flash-error" role="alert"><strong>Ada yang perlu diperiksa:</strong><ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div></div>
+@endif
+
+@yield('content')
+
+<footer class="rks-footer">
+    <div class="rks-footer-inner">
+        <a class="rks-brand rks-footer-brand" href="{{ route('home') }}"><span class="rks-brand-mark" aria-hidden="true">R</span><span class="rks-brand-name">RotiKita<span>.</span><small>BAKERY & CAFE</small></span></a>
+        <p>Roti hangat, dibuat untuk menemani hari. © {{ date('Y') }} RotiKita.</p>
+        <a href="{{ route('storefront.menu') }}">Jelajahi menu <span aria-hidden="true">→</span></a>
+    </div>
+</footer>
+<script src="{{ asset('js/rotikita-storefront.js') }}" defer></script>
+@stack('scripts')
+</body>
+</html>

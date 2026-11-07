@@ -1,0 +1,36 @@
+@extends('layouts.guest')
+
+@section('title', 'Masuk')
+
+@section('content')
+    <p class="rk-eyebrow rk-eyebrow-space">Selamat datang kembali</p>
+    <h2>Masuk ke akunmu</h2>
+    <p class="rk-auth-subtitle">Lanjutkan pengalamanmu bersama RotiKita. Masuk untuk mengelola atau memantau pesananmu.</p>
+
+    <form method="POST" action="{{ route('login.store') }}">
+        @csrf
+        <div class="rk-field">
+            <label for="email">Alamat email</label>
+            <input class="{{ $errors->has('email') ? 'is-invalid' : '' }}" id="email" name="email" type="email" value="{{ old('email') }}" placeholder="nama@email.com" autocomplete="username" maxlength="255" required autofocus>
+            @error('email')<div class="rk-field-error">{{ $message }}</div>@enderror
+        </div>
+        <div class="rk-field">
+            <label for="password">Password</label>
+            <div class="rk-password-wrap">
+                <input class="{{ $errors->has('password') ? 'is-invalid' : '' }}" id="password" name="password" type="password" placeholder="Masukkan password" autocomplete="current-password" required>
+                <button class="rk-password-toggle" type="button" data-password-toggle data-target="password" aria-label="Tampilkan password" aria-pressed="false">
+                    <span data-password-toggle-label>Lihat</span>
+                </button>
+            </div>
+            @error('password')<div class="rk-field-error">{{ $message }}</div>@enderror
+        </div>
+        <div class="rk-auth-row">
+            <label class="rk-check"><input type="checkbox" name="remember" value="1" @checked(old('remember'))> Ingat saya</label>
+            <span class="rk-kicker">Jaga kerahasiaan password</span>
+        </div>
+        <button class="rk-btn rk-btn-block" type="submit">Masuk ke RotiKita <span aria-hidden="true">→</span></button>
+    </form>
+
+    <div class="rk-auth-form-foot">Belum punya akun? <a class="rk-link" href="{{ route('register') }}">Daftar sekarang</a></div>
+    <p class="rk-auth-note">Informasi akun digunakan untuk mengelola akses, pesanan, dan layanan pelanggan RotiKita.</p>
+@endsection

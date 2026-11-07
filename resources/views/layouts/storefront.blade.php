@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="theme-color" content="#f8f3ea">
+    @php
+        $pageTitle = trim($__env->yieldContent('title', 'Roti Hangat Setiap Hari'));
+    @endphp
+    <title>{{ $pageTitle === 'Roti Hangat Setiap Hari' ? 'RotiKita Bakery — Roti Hangat Setiap Hari' : (str_contains($pageTitle, 'RotiKita Bakery') ? $pageTitle : $pageTitle.' — RotiKita Bakery') }}</title>
+    @include('partials.brand-icons')
+    @if(trim($__env->yieldContent('meta_description')) !== '')<meta name="description" content="{{ trim($__env->yieldContent('meta_description')) }}">@endif
+    @if(trim($__env->yieldContent('seo_title')) !== '')<meta property="og:title" content="{{ trim($__env->yieldContent('seo_title')) }}">@endif
+    <link rel="stylesheet" href="{{ asset('css/rotikita.css') }}?v={{ filemtime(public_path('css/rotikita.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/rotikita-storefront.css') }}?v={{ filemtime(public_path('css/rotikita-storefront.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/rotikita-account-menu.css') }}?v={{ filemtime(public_path('css/rotikita-account-menu.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/page-transitions.css') }}?v={{ filemtime(public_path('css/page-transitions.css')) }}">
+    <script>try{const k='rotikita:page-navigation',t=Number(sessionStorage.getItem(k));if(t>0&&Date.now()-t<15000&&performance.getEntriesByType('navigation')[0]?.type!=='back_forward'){document.documentElement.classList.add('rks-navigation-pending');setTimeout(()=>{document.documentElement.classList.remove('rks-navigation-pending');sessionStorage.removeItem(k)},15000)}else sessionStorage.removeItem(k)}catch{}</script>
+    @stack('styles')
+</head>
+<body class="rks-page">
+@include('partials.page-loader')
+@php
+    $storeCart = session('rotikita_cart', []);
+    $storeCartCount = is_array($storeCart) ? array_sum(array_map('intval', $storeCart)) : 0;
+@endphp
+<header class="rks-header">
+    <div class="rks-header-inner">
+        <a class="rks-brand" href="{{ route('home') }}" aria-label="RotiKita beranda">
+            <span class="rks-brand-mark" aria-hidden="true">R</span>
+            <span class="rks-brand-name">RotiKita<span>.</span><small>BAKERY & CAFE</small></span>
+        </a>
+
+        <button class="rks-mobile-menu-button" type="button" data-nav-toggle aria-expanded="false" aria-controls="rks-main-nav" aria-label="Buka navigasi">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+        </button>
+
+        <nav class="rks-nav" id="rks-main-nav" aria-label="Navigasi utama">
+            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'is-active' : '' }}">Beranda</a>
+            <a href="{{ route('storefront.menu') }}" class="{{ request()->routeIs('storefront.menu') ? 'is-active' : '' }}">Menu bakery</a>
+            <a href="{{ route('storefront.promotions') }}" class="{{ request()->routeIs('storefront.promotions') ? 'is-active' : '' }}">Promo</a>
+            <a href="{{ route('customer.cart') }}" class="rks-cart-link {{ request()->routeIs('customer.cart*') ? 'is-active' : '' }}">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 10.1a2 2 0 0 0 2 1.6h8.5a2 2 0 0 0 1.9-1.4L22 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>
+                Keranjang <span class="rks-cart-count">{{ $storeCartCount }}</span>
+            </a>
+        </nav>
+
+        <div class="rks-header-actions">
+            @auth
+                @php($accountUser = auth()->user())
+                <div class="rks-account-menu" data-account-menu>
+                    <button
+                        class="rks-account-trigger"
+                        type="button"
+                        data-account-trigger
+                        aria-expanded="false"
+                        aria-controls="rks-account-dropdown"
+                        aria-label="Buka menu akun"
+                    >
+                        <span class="rks-account-avatar" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="8" r="3.3"/><path d="M5.5 20c.6-3.5 3-5.4 6.5-5.4s5.9 1.9 6.5 5.4"/></svg>
+                        </span>
+                        <span class="rks-account-name">{{ $accountUser->name }}</span>
+                        <svg class="rks-account-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>
+                    </button>
+
+                    <div class="rks-account-dropdown" id="rks-account-dropdown" data-account-dropdown hidden>
+                        <div class="rks-account-summary">
+                            <span class="rks-account-avatar rks-account-avatar-large" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="8" r="3.3"/><path d="M5.5 20c.6-3.5 3-5.4 6.5-5.4s5.9 1.9 6.5 5.4"/></svg>
+                            </span>
+                            <span class="rks-account-summary-text">
+                                <strong>{{ $accountUser->name }}</strong>
+                                <span>{{ $accountUser->email }}</span>
+                                <small>{{ $accountUser->isAdmin() ? 'Administrator' : 'Pelanggan RotiKita' }}</small>
+                            </span>
+                        </div>
+
+                        @if ($accountUser->isAdmin())
+                            <p class="rks-account-section-label">ADMINISTRATOR</p>
+                            <a class="rks-account-item" href="{{ route('admin.dashboard') }}">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>
+                                Dashboard admin
+                            </a>
+                            <a class="rks-account-item" href="{{ route('admin.orders') }}">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5h10v17l-5-3-5 3z"/><path d="M9.5 8h5M9.5 11.5h5"/></svg>
+                                Kelola pesanan
+                            </a>
+                            <a class="rks-account-item" href="{{ route('admin.products') }}">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 7 8-4 8 4-8 4zM4 7v10l8 4 8-4V7M12 11v10"/></svg>
+                                Kelola produk
+                            </a>
+                            <a class="rks-account-item" href="{{ route('admin.combos.index') }}">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M6 7l1 13h10l1-13M9 7V4h6v3M9 11h6M9 15h6"/></svg>
+                                Kelola combo
+                            </a>
+                            <a class="rks-account-item" href="{{ route('admin.customers') }}">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3.5 20c.5-3.2 2.4-5 5.5-5s5 1.8 5.5 5M16 5.5a3 3 0 0 1 0 5.8M17 15c2.2.5 3.4 2.1 3.7 5"/></svg>
+                                Data pelanggan
+                            </a>
+                        @else
+                            <p class="rks-account-section-label">AREA PELANGGAN</p>
+                            <a class="rks-account-item" href="{{ route('customer.dashboard') }}">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>
+                                Dashboard saya
+                            </a>
+                            <a class="rks-account-item" href="{{ route('customer.orders') }}">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5h10v17l-5-3-5 3z"/><path d="M9.5 8h5M9.5 11.5h5"/></svg>
+                                Pesanan saya
+                            </a>
+                            <a class="rks-account-item" href="{{ route('customer.feedback') }}">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v11H11l-4.5 3v-3H4z"/><path d="M8 9h8M8 12.5h5"/></svg>
+                                Kritik &amp; saran
+                            </a>
+                        @endif
+
+                        <div class="rks-account-divider"></div>
+                        <form class="rks-account-logout" method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button class="rks-account-item rks-account-item-danger" type="submit">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5.5A1.5 1.5 0 0 0 4 5.5v13A1.5 1.5 0 0 0 5.5 20H10M14 8l4 4-4 4M8 12h10"/></svg>
+                                Keluar dari akun
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @else
+                <a class="rks-login-link" href="{{ route('login', ['source' => 'storefront']) }}">Masuk</a>
+                <a class="rks-btn rks-btn-primary" href="{{ route('register', ['source' => 'storefront']) }}">Daftar akun <span aria-hidden="true">→</span></a>
+            @endauth
+        </div>
+    </div>
+</header>
+
+@if (session('success'))
+    <div class="rks-flash-wrap"><div class="rks-flash" role="status">{{ session('success') }}</div></div>
+@endif
+@if ($errors->any())
+    <div class="rks-flash-wrap"><div class="rks-flash rks-flash-error" role="alert"><strong>Ada yang perlu diperiksa:</strong><ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div></div>
+@endif
+
+@yield('content')
+
+<footer class="rks-footer">
+    <div class="rks-footer-grid">
+        <section class="rks-footer-brand-column">
+            <a class="rks-brand rks-footer-brand" href="{{ route('home') }}"><span class="rks-brand-mark" aria-hidden="true">R</span><span class="rks-brand-name">RotiKita<span>.</span><small>BAKERY & CAFE</small></span></a>
+            <strong>RotiKita Bakery</strong>
+            <p>Roti Hangat Setiap Hari. Roti dan pastry dibuat untuk menemani momen sederhana.</p>
+        </section>
+        <nav class="rks-footer-column" aria-label="Jelajahi">
+            <h2>Jelajahi</h2>
+            <a href="{{ route('home') }}">Beranda</a>
+            <a href="{{ route('storefront.menu') }}">Menu Produk</a>
+            <a href="{{ route('storefront.promotions') }}">Promo</a>
+            <a href="{{ route('storefront.about') }}">Tentang Kami</a>
+            <a href="{{ route('articles.index') }}">Artikel</a>
+            <a href="{{ route('customer.tickets.index') }}">Pusat Bantuan</a>
+        </nav>
+        <section class="rks-footer-column">
+            <h2>Hubungi Kami</h2>
+            @if (filter_var(config('rotikita-contact.email'), FILTER_VALIDATE_EMAIL))
+                <a href="mailto:{{ config('rotikita-contact.email') }}">{{ config('rotikita-contact.email') }}</a>
+            @endif
+            @if (filled(config('rotikita-contact.whatsapp')))
+                @php($whatsappNumber = preg_replace('/\D+/', '', (string) config('rotikita-contact.whatsapp')))
+                @if ($whatsappNumber !== '')
+                    <a href="https://wa.me/{{ $whatsappNumber }}" target="_blank" rel="noopener noreferrer">WhatsApp RotiKita</a>
+                @endif
+            @endif
+            @if (filled(config('rotikita-contact.address')))
+                <a href="https://www.google.com/maps/search/?api=1&amp;query={{ urlencode(config('rotikita-contact.address')) }}" target="_blank" rel="noopener noreferrer">{{ config('rotikita-contact.address') }}</a>
+            @endif
+            @if (filled(config('rotikita-contact.opening_hours')))
+                <p>{{ config('rotikita-contact.opening_hours') }}</p>
+            @endif
+            @if (!filled(config('rotikita-contact.email')) && !filled(config('rotikita-contact.whatsapp')) && !filled(config('rotikita-contact.address')) && !filled(config('rotikita-contact.opening_hours')))
+                <p>Informasi kontak toko akan ditampilkan setelah dikonfigurasi.</p>
+            @endif
+        </section>
+        <section class="rks-footer-column">
+            <h2>Ikuti Kami</h2>
+            @include('storefront.partials.social-links')
+            @if (!filled(config('rotikita-contact.instagram')) && !filled(config('rotikita-contact.tiktok')) && !filled(config('rotikita-contact.facebook')) && !filled(config('rotikita-contact.youtube')))
+                <p>Akun media sosial resmi belum dikonfigurasi.</p>
+            @endif
+        </section>
+    </div>
+    <div class="rks-footer-bottom">
+        <span>© {{ date('Y') }} RotiKita Bakery</span>
+        <span>Roti Hangat Setiap Hari</span>
+    </div>
+</footer>
+@if (filled(config('rotikita-contact.whatsapp')) && preg_replace('/\D+/', '', (string) config('rotikita-contact.whatsapp')) !== '')
+    <a class="rks-whatsapp-float" href="https://wa.me/{{ preg_replace('/\D+/', '', (string) config('rotikita-contact.whatsapp')) }}" target="_blank" rel="noopener noreferrer" aria-label="Hubungi RotiKita melalui WhatsApp">WhatsApp</a>
+@endif
+<script src="{{ asset('js/rotikita-storefront.js') }}?v={{ filemtime(public_path('js/rotikita-storefront.js')) }}" defer></script>
+<script src="{{ asset('js/rotikita-cart.js') }}?v={{ filemtime(public_path('js/rotikita-cart.js')) }}" defer></script>
+<script src="{{ asset('js/rotikita-account-menu.js') }}?v={{ filemtime(public_path('js/rotikita-account-menu.js')) }}" defer></script>
+<script src="{{ asset('js/rotikita-page-loader.js') }}?v={{ filemtime(public_path('js/rotikita-page-loader.js')) }}" defer></script>
+@stack('scripts')
+</body>
+</html>

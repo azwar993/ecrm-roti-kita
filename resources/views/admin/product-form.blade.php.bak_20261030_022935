@@ -1,0 +1,65 @@
+@extends('layouts.app')
+@php($editing = $product->exists)
+@section('title', $editing ? 'Edit Produk' : 'Tambah Produk')
+@section('breadcrumb', 'Produk / '.($editing ? 'Edit' : 'Tambah'))
+@section('content')
+<div class="rk-page-heading rk-page-heading-v2">
+    <div><p class="rk-eyebrow">Katalog toko · MySQL</p><h1>{{ $editing ? 'Edit produk' : 'Tambah produk' }}</h1><p>Perubahan yang disimpan akan langsung digunakan pada halaman manajemen dan katalog customer.</p></div>
+    <a class="rk-btn rk-btn-quiet" href="{{ route('admin.products') }}">← Kembali ke produk</a>
+</div>
+
+@if($errors->any())
+    <div class="rk-alert rk-alert-error" role="alert"><strong>Periksa data berikut:</strong><ul class="rk-real-error-list">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>
+@endif
+
+<section class="rk-panel rk-panel-v2 rk-real-form-panel">
+    <form method="POST" action="{{ $editing ? route('admin.products.update', $product) : route('admin.products.store') }}" enctype="multipart/form-data">
+        @csrf
+        @if($editing) @method('PUT') @endif
+        <div class="rk-real-form-layout">
+            <div class="rk-real-form-fields">
+                <div class="rk-real-form-grid">
+                    <label class="rk-field"><span>Nama produk *</span><input type="text" name="name" value="{{ old('name', $product->name) }}" maxlength="150" required placeholder="Contoh: Roti Cokelat"><small class="rk-real-help">Nama yang akan terlihat oleh pelanggan.</small></label>
+                    <label class="rk-field"><span>SKU / kode produk *</span><input type="text" name="sku" value="{{ old('sku', $product->sku) }}" maxlength="50" required placeholder="ROT-001"><small class="rk-real-help">Harus unik untuk setiap produk.</small></label>
+                    <label class="rk-field"><span>Kategori *</span><input type="text" name="category" value="{{ old('category', $product->category) }}" maxlength="80" required placeholder="Roti manis, Pastry, Paket…"></label>
+                    <label class="rk-field"><span>Harga (Rp) *</span><input type="number" name="price" value="{{ old('price', $product->price) }}" min="0" step="1" required placeholder="18000"></label>
+                    <label class="rk-field"><span>Stok *</span><input type="number" name="stock_qty" value="{{ old('stock_qty', $product->stock_qty ?? 0) }}" min="0" step="1" required placeholder="20"></label>
+                    <label class="rk-field"><span>Status produk</span><select name="is_active"><option value="1" @selected((string)old('is_active', $product->exists ? (int)$product->is_active : 1) === '1')>Aktif — tampil di katalog</option><option value="0" @selected((string)old('is_active', $product->exists ? (int)$product->is_active : 1) === '0')>Nonaktif — disembunyikan</option></select></label>
+                    <label class="rk-field rk-real-full"><span>Deskripsi produk</span><textarea name="description" rows="4" maxlength="3000" placeholder="Komposisi, ukuran, rasa, atau informasi produk…">{{ old('description', $product->description) }}</textarea></label>
+                </div>
+            </div>
+            <aside class="rk-real-photo-panel">
+                <div class="rk-real-photo-heading"><strong>Foto produk</strong><small>JPG, PNG, atau WEBP · maks. 4 MB</small></div>
+                <div class="rk-real-photo-preview" id="product-photo-preview">
+                    @if($product->image_path)
+                        <img src="{{ asset('storage/'.$product->image_path) }}" alt="Foto {{ $product->name }}" id="product-photo-preview-image">
+                    @else
+                        <div class="rk-real-photo-empty" id="product-photo-placeholder"><span>＋</span><strong>Belum ada foto</strong><small>Foto asli akan tampil di katalog.</small></div>
+                        <img src="" alt="Preview foto produk" id="product-photo-preview-image" hidden>
+                    @endif
+                </div>
+                <label class="rk-field"><span>{{ $editing ? 'Ganti foto (opsional)' : 'Pilih foto produk' }}</span><input id="product-image-input" type="file" name="image" accept="image/jpeg,image/png,image/webp"></label>
+                @if($editing && $product->image_path)<small class="rk-real-help">Kosongkan kalau ingin tetap menggunakan foto saat ini.</small>@endif
+                <div class="rk-real-photo-note">Gunakan foto produk milik toko dengan pencahayaan jelas. Foto disimpan pada storage aplikasi dan jalurnya dicatat di database.</div>
+            </aside>
+        </div>
+        <div class="rk-real-form-footer"><a class="rk-btn rk-btn-quiet" href="{{ route('admin.products') }}">Batal</a><button class="rk-btn" type="submit">{{ $editing ? 'Simpan perubahan' : 'Simpan produk' }}</button></div>
+    </form>
+</section>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('product-image-input');
+    const image = document.getElementById('product-photo-preview-image');
+    const placeholder = document.getElementById('product-photo-placeholder');
+    if (!input || !image) return;
+    input.addEventListener('change', function () {
+        const file = input.files && input.files[0];
+        if (!file) return;
+        if (!file.type.startsWith('image/')) { input.value = ''; return; }
+        image.src = URL.createObjectURL(file);
+        image.hidden = false;
+        if (placeholder) placeholder.hidden = true;
+    });
+});
+</script>
+@endsection

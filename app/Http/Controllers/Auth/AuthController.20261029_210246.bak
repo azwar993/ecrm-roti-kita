@@ -1,0 +1,156 @@
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use App\Http\Controllers\Controller;
+use App\Models\Customer;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
+
+class AuthController extends Controller
+{
+    public function showLogin(): View|RedirectResponse
+    {
+        if (Auth::check()) {
+            return $this->redirectByRole(Auth::user());
+        }
+
+        return view('auth.login');
+    }
+
+    public function login(Request $request): RedirectResponse
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email', 'max:255'],
+            'password' => ['required', 'string'],
+        ]);
+
+        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+            return back()
+                ->withErrors(['email' => 'Email atau password tidak cocok.'])
+                ->onlyInput('email');
+        }
+
+        $request->session()->regenerate();
+        /** @var User $user */
+        $user = Auth::user();
+
+        if (! $user->is_active) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()
+                ->route('login')
+                ->withErrors(['email' => 'Akun ini sedang dinonaktifkan. Hubungi admin.'])
+                ->onlyInput('email');
+        }
+
+        // Only customers may resume a customer URL saved by the auth middleware.
+        // Administrators always land in the admin workspace.
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        if ($user->isCustomer()) {
+            return redirect()->intended(route('customer.dashboard'))
+                ->with('success', 'Berhasil masuk. Selamat datang kembali!');
+        }
+
+        return $this->redirectByRole($user);
+    }
+
+    public function showRegister(): View|RedirectResponse
+    {
+        if (Auth::check()) {
+            return $this->redirectByRole(Auth::user());
+        }
+
+        return view('auth.register');
+    }
+
+    public function register(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'phone' => ['nullable', 'string', 'max:30'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'terms' => ['accepted'],
+        ], [
+            'email.unique' => 'Email tersebut sudah terdaftar.',
+            'password.confirmed' => 'Konfirmasi password belum cocok.',
+            'terms.accepted' => 'Persetujuan penggunaan data wajib dicentang.',
+        ]);
+
+        /**
+         * User + customer profile are created in one transaction so we do not
+         * leave an account without its CRM profile if the second insert fails.
+         * Role is assigned server-side and cannot be chosen on the registration form.
+         */
+        $user = DB::transaction(function () use ($data): User {
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                // The User model's "hashed" cast hashes this value automatically.
+                'password' => $data['password'],
+            ]);
+
+            $user->role = 'customer';
+            $user->is_active = true;
+            $user->save();
+
+            Customer::create([
+                'user_id' => $user->id,
+                'customer_code' => 'CUS-' . str_pad((string) $user->id, 6, '0', STR_PAD_LEFT),
+                'full_name' => $data['name'],
+                'contact_email' => $data['email'],
+                'phone' => $data['phone'] ?? null,
+            ]);
+
+            return $user;
+        });
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('customer.dashboard'))
+            ->with('success', 'Pendaftaran berhasil. Selamat datang di RotiKita!');
+    }
+
+    public function logout(Request $request): RedirectResponse
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('home')->with('success', 'Kamu berhasil keluar dari akun.');
+    }
+
+    private function redirectByRole(?User $user): RedirectResponse
+    {
+        if (! $user) {
+            return redirect()->route('login');
+        }
+
+        if (! $user->is_active) {
+            Auth::logout();
+            abort(403, 'Akun ini sedang dinonaktifkan.');
+        }
+
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        if ($user->isCustomer()) {
+            return redirect()->route('customer.dashboard');
+        }
+
+        Auth::logout();
+        abort(403, 'Role akun belum dikonfigurasi.');
+    }
+}

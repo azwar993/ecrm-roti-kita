@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Http\Controllers\Customer;
+
+use App\Http\Controllers\Controller;
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+class CatalogController extends Controller
+{
+    public function index(Request $request): View
+    {
+        $query = Product::query()->where('is_active', true)->latest('id');
+        $search = trim((string) $request->query('q', ''));
+        $category = trim((string) $request->query('category', ''));
+
+        if ($search !== '') {
+            $query->where(function ($builder) use ($search): void {
+                $builder->where('name', 'like', "%{$search}%")
+                    ->orWhere('sku', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('category', 'like', "%{$search}%");
+            });
+        }
+
+        if ($category !== '') {
+            $query->where('category', $category);
+        }
+
+        $products = $query->paginate(12)->withQueryString();
+        $categories = Product::query()
+            ->where('is_active', true)
+            ->select('category')
+            ->distinct()
+            ->orderBy('category')
+            ->pluck('category');
+
+        return view('customer.catalog', compact('products', 'categories', 'search', 'category'));
+    }
+}

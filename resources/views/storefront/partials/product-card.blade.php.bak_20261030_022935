@@ -1,0 +1,33 @@
+<article class="rks-product-card">
+    <a class="rks-product-image" href="{{ route('storefront.menu') }}" aria-label="Lihat menu RotiKita">
+        @if ($product->image_path)
+            <img src="{{ asset('storage/' . ltrim($product->image_path, '/')) }}" alt="Foto {{ $product->name }}" loading="lazy">
+        @else
+            <span class="rks-product-fallback" aria-hidden="true">🥐</span>
+        @endif
+        @if ((int) $product->stock_qty <= 0)
+            <span class="rks-product-ribbon is-soldout">Habis</span>
+        @elseif ((int) $product->stock_qty <= 5)
+            <span class="rks-product-ribbon">Stok terbatas</span>
+        @endif
+    </a>
+    <div class="rks-product-body">
+        <div class="rks-product-meta"><span>{{ $product->category ?: 'Pilihan RotiKita' }}</span><span aria-hidden="true">·</span><span>{{ $product->sku }}</span></div>
+        <h3>{{ $product->name }}</h3>
+        <p>{{ \Illuminate\Support\Str::limit($product->description ?: 'Roti pilihan yang dibuat dengan sepenuh hati.', 96) }}</p>
+        <div class="rks-product-bottom">
+            <strong class="rks-price">Rp {{ number_format((float) $product->price, 0, ',', '.') }}</strong>
+            <span class="rks-stock {{ (int) $product->stock_qty > 0 ? 'is-available' : 'is-unavailable' }}">{{ (int) $product->stock_qty > 0 ? 'Tersedia' : 'Stok habis' }}</span>
+        </div>
+        <form class="rks-add-form" method="POST" action="{{ route('customer.cart.items.store') }}">
+            @csrf
+            <input type="hidden" name="type" value="product">
+            <input type="hidden" name="id" value="{{ $product->id }}">
+            <label class="rks-sr-only" for="product-qty-{{ $product->id }}">Jumlah {{ $product->name }}</label>
+            <input id="product-qty-{{ $product->id }}" class="rks-qty" type="number" name="quantity" value="1" min="1" max="99" @disabled((int) $product->stock_qty < 1)>
+            <button class="rks-btn rks-btn-add" type="submit" @disabled((int) $product->stock_qty < 1)>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg> Tambah
+            </button>
+        </form>
+    </div>
+</article>

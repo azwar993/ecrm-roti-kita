@@ -1,0 +1,47 @@
+<?php
+
+use App\Http\Controllers\Auth\AuthController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', function () {
+    if (! auth()->check()) {
+        return redirect()->route('login');
+    }
+
+    return auth()->user()->role === 'admin'
+        ? redirect()->route('admin.dashboard')
+        : redirect()->route('customer.dashboard');
+})->name('home');
+
+// Default post-login destination used by Laravel's guest redirect middleware.
+Route::get('/dashboard', function () {
+    return auth()->user()->role === 'admin'
+        ? redirect()->route('admin.dashboard')
+        : redirect()->route('customer.dashboard');
+})->middleware('auth')->name('dashboard');
+
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.store');
+
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.store');
+});
+
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
+
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth', 'role:admin'])
+    ->group(function () {
+        Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
+    });
+
+Route::prefix('customer')
+    ->name('customer.')
+    ->middleware(['auth', 'role:customer'])
+    ->group(function () {
+        Route::view('/dashboard', 'customer.dashboard')->name('dashboard');
+    });

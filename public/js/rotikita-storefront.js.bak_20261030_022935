@@ -1,0 +1,12 @@
+document.addEventListener('DOMContentLoaded', function () {
+    const toggle = document.querySelector('[data-nav-toggle]');
+    const nav = document.getElementById('rks-main-nav');
+    if (!toggle || !nav) return;
+
+    toggle.addEventListener('click', function () {
+        const expanded = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!expanded));
+        toggle.setAttribute('aria-label', expanded ? 'Buka navigasi' : 'Tutup navigasi');
+        nav.classList.toggle('is-open', !expanded);
+    });
+});

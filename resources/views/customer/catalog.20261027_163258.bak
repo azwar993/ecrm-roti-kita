@@ -1,0 +1,25 @@
+@extends('layouts.app')
+@section('title', 'Katalog RotiKita')
+@section('breadcrumb', 'Katalog')
+@section('content')
+@php
+$products = [
+ ['name'=>'Roti Cokelat','category'=>'Roti manis','price'=>'Rp 18.000','desc'=>'Roti lembut dengan isian cokelat lumer.','art'=>'🍞','tone'=>'peach','tag'=>'Favorit'],
+ ['name'=>'Croissant Butter','category'=>'Pastry','price'=>'Rp 22.000','desc'=>'Pastry berlapis dengan aroma butter.','art'=>'🥐','tone'=>'gold','tag'=>'Bestseller'],
+ ['name'=>'Sourdough Original','category'=>'Artisan','price'=>'Rp 42.000','desc'=>'Fermentasi alami, crust renyah dan lembut.','art'=>'🥖','tone'=>'sage','tag'=>'Artisan'],
+ ['name'=>'Cinnamon Roll','category'=>'Pastry','price'=>'Rp 24.000','desc'=>'Kayu manis hangat dengan glaze tipis.','art'=>'🍥','tone'=>'rose','tag'=>'Baru'],
+ ['name'=>'Roti Keju','category'=>'Roti manis','price'=>'Rp 20.000','desc'=>'Gurih keju dalam roti yang empuk.','art'=>'🧀','tone'=>'gold','tag'=>'Favorit'],
+ ['name'=>'Paket Roti Keluarga','category'=>'Paket','price'=>'Rp 95.000','desc'=>'Pilihan roti untuk dinikmati bersama.','art'=>'🧺','tone'=>'peach','tag'=>'Hemat'],
+];
+@endphp
+<div class="rk-page-heading rk-page-heading-v2"><div><p class="rk-eyebrow">Fresh from the oven</p><h1>Katalog RotiKita</h1><p>Roti hangat, pastry favorit, dan pilihan terbaik untuk hari ini.</p></div><span class="rk-status rk-status-soon">UI preview · produk contoh</span></div>
+<div class="rk-preview-notice"><span>KATALOG PREVIEW</span> Produk dan harga ini contoh tampilan; stok, keranjang, dan checkout belum tersambung ke transaksi.</div>
+<section class="rk-catalog-hero"><div class="rk-catalog-hero-copy"><span class="rk-mini-label">DIBUAT SEGAR SETIAP HARI</span><h2>Hal sederhana,<br><em>rasa yang istimewa.</em></h2><p>Temukan roti pilihan yang dibuat dengan sepenuh hati untuk menemani harimu.</p><a class="rk-btn" href="#produk">Jelajahi produk <span>↓</span></a><small>Freshly baked · Made with care</small></div><div class="rk-catalog-hero-art" aria-hidden="true"><div class="rk-hero-circle"></div><span class="rk-hero-bread">🥐</span><span class="rk-hero-bread-small">🥖</span><span class="rk-hero-sparkle">✦</span></div></section>
+<section id="produk" class="rk-catalog-section"><div class="rk-section-heading"><div><p class="rk-eyebrow">Pilihan hari ini</p><h2>Temukan favoritmu</h2><p>Produk bakery yang cocok untuk menemani momen kecil sehari-hari.</p></div><label class="rk-search rk-catalog-search"><span>⌕</span><input id="catalog-search" type="search" placeholder="Cari roti favorit…"></label></div>
+<div class="rk-category-pills"><button class="is-active" type="button" data-product-category="all">Semua produk</button><button type="button" data-product-category="Roti manis">Roti manis</button><button type="button" data-product-category="Pastry">Pastry</button><button type="button" data-product-category="Artisan">Artisan</button><button type="button" data-product-category="Paket">Paket hemat</button></div>
+<div class="rk-product-grid" id="catalog-products">
+@foreach($products as $product)<article class="rk-store-product" data-product-card data-category="{{ $product['category'] }}" data-search="{{ strtolower($product['name'].' '.$product['category'].' '.$product['desc']) }}"><div class="rk-store-product-art rk-art-{{ $product['tone'] }}"><span class="rk-product-tag">{{ $product['tag'] }}</span><span aria-hidden="true">{{ $product['art'] }}</span><button class="rk-product-heart" type="button" aria-label="Favoritkan produk" data-demo-toast="Favorit akan disimpan setelah fitur wishlist dibuat.">♡</button></div><div class="rk-store-product-info"><small>{{ $product['category'] }}</small><h3>{{ $product['name'] }}</h3><p>{{ $product['desc'] }}</p><div class="rk-store-product-bottom"><strong>{{ $product['price'] }}</strong><button class="rk-add-cart" type="button" data-add-cart>＋ <span>Tambah</span></button></div></div></article>@endforeach
+</div><div id="catalog-empty" class="rk-empty-state" hidden><div class="rk-empty-icon">⌕</div><h3>Produk tidak ditemukan</h3><p>Coba kata kunci atau kategori lainnya.</p></div>
+</section>
+<section class="rk-catalog-promo"><span class="rk-quick-icon">✦</span><div><strong>Jangan lewatkan promo RotiKita</strong><p>Ikuti informasi penawaran dan kabar terbaru dari toko kami.</p></div><span class="rk-catalog-promo-note">Penawaran contoh · fitur promosi menyusul</span></section>
+@endsection

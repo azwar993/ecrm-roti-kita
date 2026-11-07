@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>@yield('title', 'Autentikasi') · RotiKita</title>
+    <link rel="stylesheet" href="{{ asset('css/rotikita.css') }}">
+</head>
+<body class="rk-auth-page">
+    <main class="rk-auth-shell">
+        <section class="rk-auth-brand" aria-label="Tentang RotiKita">
+            <a class="rk-brand" href="{{ route('home') }}">
+                <span class="rk-brand-mark">R</span>
+                <span>RotiKita<span class="rk-brand-dot">.</span></span>
+            </a>
+            <div class="rk-auth-copy">
+                <p class="rk-eyebrow">Bakery · Customer experience</p>
+                <h1>Roti hangat.<br>Hubungan yang dekat.</h1>
+                <p>Tempat sederhana untuk menikmati produk favorit, mengikuti pesanan, dan tetap terhubung dengan RotiKita.</p>
+                <svg class="rk-bread-art" viewBox="0 0 320 190" role="img" aria-label="Ilustrasi roti dan gandum">
+                    <ellipse cx="160" cy="160" rx="118" ry="15" fill="#9f6849" opacity=".13"/>
+                    <path d="M69 119C43 98 54 60 87 51C107 25 146 39 160 48C187 26 223 39 235 61C269 72 274 106 250 127C224 151 94 151 69 119Z" fill="#c77b45" stroke="#98613b" stroke-width="3"/>
+                    <path d="M91 96C102 81 110 72 125 64M131 111C141 93 150 78 164 65M174 112C185 92 198 78 211 69" stroke="#f8dba8" stroke-width="8" stroke-linecap="round" fill="none"/>
+                    <path d="M37 142C48 111 44 87 32 70M32 91C16 87 13 77 13 67C27 66 36 76 32 91ZM39 112C56 106 61 95 58 84C43 86 35 98 39 112Z" stroke="#68805b" stroke-width="4" fill="#8ca277" stroke-linejoin="round"/>
+                    <path d="M282 143C270 114 275 90 286 73M286 94C301 88 307 78 305 68C291 70 282 80 286 94ZM279 114C263 108 257 97 260 87C274 89 283 101 279 114Z" stroke="#68805b" stroke-width="4" fill="#8ca277" stroke-linejoin="round"/>
+                    <circle cx="250" cy="37" r="4" fill="#c96d4c"/><circle cx="64" cy="39" r="3" fill="#c96d4c"/>
+                </svg>
+            </div>
+            <div class="rk-auth-foot">© {{ date('Y') }} RotiKita · Customer Relationship Management</div>
+        </section>
+
+        <section class="rk-auth-form">
+            <a class="rk-brand rk-auth-mobile-brand" href="{{ route('home') }}">
+                <span class="rk-brand-mark">R</span>
+                <span>RotiKita<span class="rk-brand-dot">.</span></span>
+            </a>
+
+            @if (session('success'))
+                <div class="rk-alert rk-alert-success" role="status">{{ session('success') }}</div>
+            @endif
+
+            @if ($errors->any())
+                <div class="rk-alert rk-alert-error" role="alert">
+                    <strong>Ada yang perlu diperbaiki.</strong>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            @yield('content')
+        </section>
+    </main>
+    <script>
+        document.querySelectorAll('[data-password-toggle]').forEach((button) => {
+            button.addEventListener('click', () => {
+                const input = document.getElementById(button.dataset.target);
+                if (!input) return;
+
+                const shouldReveal = input.type === 'password';
+                input.type = shouldReveal ? 'text' : 'password';
+                button.setAttribute('aria-pressed', String(shouldReveal));
+                button.setAttribute(
+                    'aria-label',
+                    shouldReveal ? 'Sembunyikan password' : 'Tampilkan password'
+                );
+
+                const label = button.querySelector('[data-password-toggle-label]');
+                if (label) label.textContent = shouldReveal ? 'Sembunyikan' : 'Lihat';
+            });
+        });
+    </script>
+</body>
+</html>

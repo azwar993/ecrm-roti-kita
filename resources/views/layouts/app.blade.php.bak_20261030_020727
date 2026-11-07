@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>@yield('title', 'Dashboard') · RotiKita</title>
+    <link rel="stylesheet" href="{{ asset('css/rotikita.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/rotikita-v2-pages.css') }}">
+</head>
+<body>
+@php
+    $currentUser = auth()->user();
+    $isAdmin = $currentUser && $currentUser->role === 'admin';
+    $adminNavigation = [
+        ['label' => 'Dashboard', 'icon' => '▦', 'route' => 'admin.dashboard', 'active' => 'admin.dashboard'],
+        ['label' => 'Pelanggan', 'icon' => '♙', 'route' => 'admin.customers', 'active' => 'admin.customers'],
+        ['label' => 'Produk', 'icon' => '▤', 'route' => 'admin.products', 'active' => 'admin.products'],
+        ['label' => 'Pemesanan', 'icon' => '▣', 'route' => 'admin.orders', 'active' => 'admin.orders'],
+        ['label' => 'Promosi', 'icon' => '✳', 'route' => 'admin.promotions', 'active' => 'admin.promotions'],
+        ['label' => 'Feedback', 'icon' => '✉', 'route' => 'admin.feedback', 'active' => 'admin.feedback'],
+    ];
+    $customerNavigation = [
+        ['label' => 'Beranda', 'icon' => '⌂', 'route' => 'customer.dashboard', 'active' => 'customer.dashboard'],
+        ['label' => 'Katalog', 'icon' => '▤', 'route' => 'customer.catalog', 'active' => 'customer.catalog'],
+        ['label' => 'Pesanan saya', 'icon' => '▣', 'route' => 'customer.orders', 'active' => 'customer.orders'],
+        ['label' => 'Kritik & saran', 'icon' => '✉', 'route' => 'customer.feedback', 'active' => 'customer.feedback'],
+    ];
+    $navigation = $isAdmin ? $adminNavigation : $customerNavigation;
+@endphp
+<div class="rk-app">
+    <aside class="rk-sidebar">
+        <a class="rk-brand" href="{{ route('home') }}">
+            <span class="rk-brand-mark">R</span>
+            <span>RotiKita<span class="rk-brand-dot">.</span></span>
+        </a>
+
+        <div class="rk-nav-caption">{{ $isAdmin ? 'Workspace admin' : 'Area pelanggan' }}</div>
+        <nav class="rk-nav" aria-label="Navigasi utama">
+            @foreach ($navigation as $item)
+                <a class="rk-nav-link {{ request()->routeIs($item['active']) ? 'is-active' : '' }}"
+                   href="{{ route($item['route']) }}"
+                   @if (request()->routeIs($item['active'])) aria-current="page" @endif>
+                    <span class="rk-nav-icon" aria-hidden="true">{{ $item['icon'] }}</span>
+                    <span class="rk-nav-label">{{ $item['label'] }}</span>
+                </a>
+            @endforeach
+        </nav>
+
+        <div class="rk-sidebar-bottom">
+            <strong>RotiKita E-CRM</strong><br>
+            Kelola hubungan, bukan hanya transaksi.
+            <span class="rk-sidebar-note">Versi pengembangan · {{ date('Y') }}</span>
+        </div>
+    </aside>
+
+    <div class="rk-main">
+        <header class="rk-topbar">
+            <div class="rk-breadcrumb">RotiKita <span aria-hidden="true">/</span> <strong>@yield('breadcrumb', 'Dashboard')</strong></div>
+            <div class="rk-user-menu">
+                <div class="rk-avatar" aria-hidden="true">{{ strtoupper(substr($currentUser?->name ?? 'U', 0, 1)) }}</div>
+                <div class="rk-user-meta">
+                    <div class="rk-user-name">{{ $currentUser?->name }}</div>
+                    <div class="rk-user-role">{{ $isAdmin ? 'Administrator' : 'Customer' }}</div>
+                </div>
+                <form class="rk-logout-form" method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button class="rk-btn rk-btn-quiet rk-btn-small" type="submit">Keluar <span aria-hidden="true">↗</span></button>
+                </form>
+            </div>
+        </header>
+
+        <main class="rk-content">
+            @if (session('success'))
+                <div class="rk-alert rk-alert-success" role="status">{{ session('success') }}</div>
+            @endif
+            @if (session('error'))
+                <div class="rk-alert rk-alert-error" role="alert">{{ session('error') }}</div>
+            @endif
+            @yield('content')
+            <footer class="rk-footer">© {{ date('Y') }} RotiKita · Sistem Informasi Customer Relationship Management</footer>
+        </main>
+    </div>
+</div>
+    <script defer src="{{ asset('js/rotikita-v2-ui.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class StorefrontAuthenticationTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_guests_can_open_the_public_home_and_menu(): void
+    {
+        $this->get(route('home'))->assertOk()->assertViewIs('storefront.home');
+        $this->get(route('storefront.menu'))->assertOk()->assertViewIs('storefront.menu');
+    }
+
+    public function test_customer_login_returns_to_public_home_even_with_stale_dashboard_intended_url(): void
+    {
+        $user = $this->makeUser('customer');
+
+        $this->withSession(['url.intended' => route('customer.dashboard')])
+            ->post(route('login.store'), ['email' => $user->email, 'password' => 'password'])
+            ->assertRedirect(route('home'));
+
+        $this->get(route('home'))->assertOk()->assertViewIs('storefront.home');
+    }
+
+    public function test_admin_login_returns_to_public_home(): void
+    {
+        $user = $this->makeUser('admin');
+
+        $this->post(route('login.store'), ['email' => $user->email, 'password' => 'password'])
+            ->assertRedirect(route('home'));
+    }
+
+    public function test_registration_returns_to_public_home_even_when_an_old_checkout_url_exists(): void
+    {
+        $this->withSession([
+            'url.intended' => route('customer.checkout'),
+            'rotikita.auth_context' => 'checkout',
+        ])->post(route('register.store'), [
+            'name' => 'Customer Baru',
+            'email' => 'baru@example.test',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+            'terms' => '1',
+        ])->assertRedirect(route('home'));
+    }
+
+    public function test_checkout_intended_destination_and_session_cart_survive_login(): void
+    {
+        $user = $this->makeUser('customer');
+        $cart = ['product_123' => 2];
+
+        $this->withSession(['rotikita_cart' => $cart])
+            ->get(route('customer.checkout'))
+            ->assertRedirect(route('login'))
+            ->assertSessionHas('rotikita.auth_context', 'checkout')
+            ->assertSessionHas('url.intended', route('customer.checkout'));
+
+        $this->post(route('login.store'), ['email' => $user->email, 'password' => 'password'])
+            ->assertRedirect(route('customer.checkout'))
+            ->assertSessionHas('rotikita_cart', $cart);
+    }
+
+    public function test_dashboard_is_only_reached_by_its_explicit_route_and_has_real_empty_metrics(): void
+    {
+        $user = $this->makeUser('customer');
+
+        $this->actingAs($user)->get(route('customer.dashboard'))
+            ->assertOk()
+            ->assertSee('Total pesanan')
+            ->assertSee('Belum ada pesanan')
+            ->assertDontSee('MODE PREVIEW')
+            ->assertDontSee('RK-1047');
+    }
+
+    public function test_admin_dashboard_uses_the_live_dashboard_view_without_preview_copy(): void
+    {
+        $user = $this->makeUser('admin');
+
+        $this->actingAs($user)->get(route('admin.dashboard'))
+            ->assertOk()
+            ->assertSee('Total pelanggan')
+            ->assertDontSee('MODE PREVIEW')
+            ->assertDontSee('RK-1048');
+    }
+
+    private function makeUser(string $role): User
+    {
+        $user = User::create([
+            'name' => ucfirst($role).' Test',
+            'email' => $role.'@example.test',
+            'password' => 'password',
+        ]);
+        $user->role = $role;
+        $user->is_active = true;
+        $user->save();
+
+        return $user;
+    }
+}

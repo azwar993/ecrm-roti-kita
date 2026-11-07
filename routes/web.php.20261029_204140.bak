@@ -1,0 +1,185 @@
+
+<?php
+
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Customer\CartController;
+use App\Http\Controllers\Customer\CatalogController;
+use App\Http\Controllers\Customer\CheckoutController;
+use App\Http\Controllers\Customer\OrderController as CustomerOrderController;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Home
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/', function () {
+    if (! auth()->check()) {
+        return redirect()->route('login');
+    }
+
+    return auth()->user()->role === 'admin'
+        ? redirect()->route('admin.dashboard')
+        : redirect()->route('customer.dashboard');
+})->name('home');
+
+Route::get('/dashboard', function () {
+    return auth()->user()->role === 'admin'
+        ? redirect()->route('admin.dashboard')
+        : redirect()->route('customer.dashboard');
+})->middleware('auth')->name('dashboard');
+
+/*
+|--------------------------------------------------------------------------
+| Authentication
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])
+        ->name('login');
+
+    Route::post('/login', [AuthController::class, 'login'])
+        ->name('login.store');
+
+    Route::get('/register', [AuthController::class, 'showRegister'])
+        ->name('register');
+
+    Route::post('/register', [AuthController::class, 'register'])
+        ->name('register.store');
+});
+
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
+
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth', 'role:admin'])
+    ->group(function () {
+        // Dashboard
+        Route::view('/dashboard', 'admin.dashboard')
+            ->name('dashboard');
+
+        // Customers
+        Route::view('/customers', 'admin.customers')
+            ->name('customers');
+
+        // Products
+        Route::get('/products', [ProductController::class, 'index'])
+            ->name('products');
+
+        Route::get('/products/create', [ProductController::class, 'create'])
+            ->name('products.create');
+
+        Route::post('/products', [ProductController::class, 'store'])
+            ->name('products.store');
+
+        Route::get('/products/{product}/edit', [ProductController::class, 'edit'])
+            ->whereNumber('product')
+            ->name('products.edit');
+
+        Route::put('/products/{product}', [ProductController::class, 'update'])
+            ->whereNumber('product')
+            ->name('products.update');
+
+        Route::delete('/products/{product}', [ProductController::class, 'destroy'])
+            ->whereNumber('product')
+            ->name('products.destroy');
+
+        // Orders
+        Route::get('/orders', [AdminOrderController::class, 'index'])
+            ->name('orders');
+
+        Route::get('/orders/{order}', [AdminOrderController::class, 'show'])
+            ->whereNumber('order')
+            ->name('orders.show');
+
+        Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])
+            ->whereNumber('order')
+            ->name('orders.status');
+
+        Route::patch('/orders/{order}/payment', [AdminOrderController::class, 'verifyPayment'])
+            ->whereNumber('order')
+            ->name('orders.payment');
+
+        Route::get('/orders/{order}/receipt', [AdminOrderController::class, 'receipt'])
+            ->whereNumber('order')
+            ->name('orders.receipt');
+
+        // Promotions
+        Route::view('/promotions', 'admin.promotions')
+            ->name('promotions');
+
+        // Feedback
+        Route::view('/feedback', 'admin.feedback')
+            ->name('feedback');
+    });
+
+/*
+|--------------------------------------------------------------------------
+| Customer Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('customer')
+    ->name('customer.')
+    ->middleware(['auth', 'role:customer'])
+    ->group(function () {
+        // Dashboard
+        Route::view('/dashboard', 'customer.dashboard')
+            ->name('dashboard');
+
+        // Product Catalog
+        Route::get('/catalog', [CatalogController::class, 'index'])
+            ->name('catalog');
+
+        // Shopping Cart
+        Route::get('/cart', [CartController::class, 'index'])
+            ->name('cart');
+
+        Route::post('/cart/items', [CartController::class, 'store'])
+            ->name('cart.items.store');
+
+        Route::put('/cart/items/{type}/{id}', [CartController::class, 'update'])
+            ->where('type', 'product|combo')
+            ->whereNumber('id')
+            ->name('cart.items.update');
+
+        Route::delete('/cart/items/{type}/{id}', [CartController::class, 'destroy'])
+            ->where('type', 'product|combo')
+            ->whereNumber('id')
+            ->name('cart.items.destroy');
+
+        // Checkout
+        Route::get('/checkout', [CheckoutController::class, 'show'])
+            ->name('checkout');
+
+        Route::post('/checkout', [CheckoutController::class, 'store'])
+            ->name('checkout.store');
+
+        // Customer Orders
+        Route::get('/orders', [CustomerOrderController::class, 'index'])
+            ->name('orders');
+
+        Route::get('/orders/{order}', [CustomerOrderController::class, 'show'])
+            ->whereNumber('order')
+            ->name('orders.show');
+
+        Route::get('/orders/{order}/receipt', [CustomerOrderController::class, 'receipt'])
+            ->whereNumber('order')
+            ->name('orders.receipt');
+
+        // Feedback
+        Route::view('/feedback', 'customer.feedback')
+            ->name('feedback');
+    });

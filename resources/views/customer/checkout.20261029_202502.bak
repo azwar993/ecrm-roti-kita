@@ -1,0 +1,48 @@
+@extends('layouts.app')
+@section('title', 'Checkout')
+@section('breadcrumb', 'Checkout')
+@section('content')
+@include('components.commerce-styles')
+<div class="rk-commerce">
+    @if ($errors->any())<div class="rk-commerce-errors" role="alert"><strong>Checkout belum bisa diproses.</strong><ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
+    <div class="rk-commerce-head"><div><div class="rk-commerce-eyebrow">Satu langkah lagi</div><h1>Checkout</h1><p>Pilih dine-in atau takeaway dan metode pembayaran. Total dihitung ulang dari data server saat pesanan disimpan.</p></div><a class="rk-commerce-btn ghost" href="{{ route('customer.cart') }}">← Ubah keranjang</a></div>
+    <form method="POST" action="{{ route('customer.checkout.store') }}" enctype="multipart/form-data">
+        @csrf
+        <div class="rk-commerce-grid two">
+            <div>
+                <section class="rk-commerce-panel"><h2 style="margin-top:0">Jenis pesanan</h2>
+                    <div class="rk-commerce-form-grid">
+                        <label class="rk-commerce-field">Pilih layanan<select class="rk-commerce-select" name="order_type" id="order-type" required><option value="takeaway" @selected(old('order_type','takeaway')==='takeaway')>Takeaway — dibawa pulang</option><option value="dine_in" @selected(old('order_type')==='dine_in')>Dine-in — makan di tempat</option></select></label>
+                        <label class="rk-commerce-field" id="table-number-wrap">Nomor meja <input class="rk-commerce-input" type="text" name="table_number" value="{{ old('table_number') }}" maxlength="30" placeholder="Contoh: A3"><small>Wajib untuk dine-in, dikosongkan untuk takeaway.</small></label>
+                        <label class="rk-commerce-field">Nomor telepon (opsional)<input class="rk-commerce-input" type="text" name="customer_phone" value="{{ old('customer_phone', auth()->user()->customer?->phone) }}" maxlength="30" placeholder="Nomor yang bisa dihubungi"></label>
+                        <label class="rk-commerce-field">Metode pembayaran<select class="rk-commerce-select" name="payment_method" id="payment-method" required><option value="cash" @selected(old('payment_method','cash')==='cash')>Tunai di kasir</option><option value="bank_transfer" @selected(old('payment_method')==='bank_transfer')>Transfer bank (verifikasi admin)</option><option value="qris" @selected(old('payment_method')==='qris')>QRIS (verifikasi admin)</option></select><small>Ini pencatatan pembayaran manual, belum payment gateway otomatis.</small></label>
+                        <label class="rk-commerce-field full">Kode promosi (opsional)<input class="rk-commerce-input" name="promotion_code" value="{{ old('promotion_code') }}" maxlength="50" placeholder="Masukkan kode promo yang aktif"></label>
+                        <label class="rk-commerce-field full">Bukti pembayaran (opsional)<input class="rk-commerce-input" type="file" name="payment_proof" accept=".jpg,.jpeg,.png,.webp,.pdf"><small>JPG, PNG, WEBP atau PDF maksimal 4 MB. Admin tetap memverifikasi pembayaran secara manual.</small></label>
+                        <label class="rk-commerce-field full">Catatan pesanan (opsional)<textarea class="rk-commerce-textarea" name="notes" maxlength="2000" placeholder="Catatan untuk pesanan...">{{ old('notes') }}</textarea></label>
+                    </div>
+                </section>
+            </div>
+            <aside class="rk-commerce-panel rk-commerce-summary"><h2 style="margin-top:0">Ringkasan pesanan</h2>
+                @foreach($items as $item)<div class="rk-commerce-total"><span>{{ $item['name'] }} × {{ $item['quantity'] }}</span><strong>Rp {{ number_format($item['line_total_cents']/100,0,',','.') }}</strong></div>@endforeach
+                <div class="rk-commerce-total final"><span>Subtotal</span><span>Rp {{ number_format($subtotal_cents/100,0,',','.') }}</span></div>
+                <div class="rk-commerce-note">Diskon promo (jika berlaku) dihitung dan divalidasi oleh Laravel. Stok komponen combo akan diperiksa bersama stok produk satuan.</div>
+                <button class="rk-commerce-btn" style="width:100%;margin-top:18px" type="submit">Buat pesanan</button>
+            </aside>
+        </div>
+    </form>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const type = document.getElementById('order-type');
+    const tableWrap = document.getElementById('table-number-wrap');
+    const tableInput = tableWrap ? tableWrap.querySelector('input') : null;
+    function syncTableField() {
+        const dineIn = type && type.value === 'dine_in';
+        if (tableInput) tableInput.required = dineIn;
+        if (tableWrap) tableWrap.style.opacity = dineIn ? '1' : '.65';
+    }
+    if (type) type.addEventListener('change', syncTableField);
+    syncTableField();
+});
+</script>
+@endsection

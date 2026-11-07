@@ -1,0 +1,123 @@
+<?php
+
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Customer\CartController;
+use App\Http\Controllers\Customer\CatalogController;
+use App\Http\Controllers\Customer\CheckoutController;
+use App\Http\Controllers\Customer\DashboardController as CustomerDashboardController;
+use App\Http\Controllers\Customer\OrderController as CustomerOrderController;
+use App\Http\Controllers\StorefrontController;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Public storefront
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/', [StorefrontController::class, 'home'])->name('home');
+Route::get('/menu', [StorefrontController::class, 'menu'])->name('storefront.menu');
+
+Route::get('/dashboard', function () {
+    return auth()->user()->role === 'admin'
+        ? redirect()->route('admin.dashboard')
+        : redirect()->route('customer.dashboard');
+})->middleware('auth')->name('dashboard');
+
+/*
+|--------------------------------------------------------------------------
+| Authentication
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.store');
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.store');
+});
+
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
+
+/*
+|--------------------------------------------------------------------------
+| Session cart — intentionally public
+|--------------------------------------------------------------------------
+| Guests can add and edit items in their session cart. Checkout remains
+| protected by auth + role:customer further below. Laravel session data is
+| retained when the session ID is regenerated at login/registration.
+*/
+
+Route::get('/customer/cart', [CartController::class, 'index'])->name('customer.cart');
+Route::post('/customer/cart/items', [CartController::class, 'store'])->name('customer.cart.items.store');
+Route::put('/customer/cart/items/{type}/{id}', [CartController::class, 'update'])
+    ->where('type', 'product|combo')
+    ->whereNumber('id')
+    ->name('customer.cart.items.update');
+Route::delete('/customer/cart/items/{type}/{id}', [CartController::class, 'destroy'])
+    ->where('type', 'product|combo')
+    ->whereNumber('id')
+    ->name('customer.cart.items.destroy');
+
+/*
+|--------------------------------------------------------------------------
+| Admin routes
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
+    Route::view('/customers', 'admin.customers')->name('customers');
+
+    Route::get('/products', [ProductController::class, 'index'])->name('products');
+    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])
+        ->whereNumber('product')->name('products.edit');
+    Route::put('/products/{product}', [ProductController::class, 'update'])
+        ->whereNumber('product')->name('products.update');
+    Route::delete('/products/{product}', [ProductController::class, 'destroy'])
+        ->whereNumber('product')->name('products.destroy');
+
+    Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders');
+    Route::get('/orders/{order}', [AdminOrderController::class, 'show'])
+        ->whereNumber('order')->name('orders.show');
+    Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])
+        ->whereNumber('order')->name('orders.status');
+    Route::patch('/orders/{order}/payment', [AdminOrderController::class, 'verifyPayment'])
+        ->whereNumber('order')->name('orders.payment');
+    Route::get('/orders/{order}/receipt', [AdminOrderController::class, 'receipt'])
+        ->whereNumber('order')->name('orders.receipt');
+
+    Route::view('/promotions', 'admin.promotions')->name('promotions');
+    Route::view('/feedback', 'admin.feedback')->name('feedback');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Customer routes
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('customer')->name('customer.')->middleware(['auth', 'role:customer'])->group(function () {
+    Route::get('/dashboard', CustomerDashboardController::class)->name('dashboard');
+    Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog');
+
+    Route::get('/orders', [CustomerOrderController::class, 'index'])->name('orders');
+    Route::get('/orders/{order}', [CustomerOrderController::class, 'show'])
+        ->whereNumber('order')->name('orders.show');
+    Route::get('/orders/{order}/receipt', [CustomerOrderController::class, 'receipt'])
+        ->whereNumber('order')->name('orders.receipt');
+
+    Route::view('/feedback', 'customer.feedback')->name('feedback');
+});
+
+Route::prefix('customer')->name('customer.')->middleware(['checkout.auth', 'role:customer'])->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+});

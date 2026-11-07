@@ -1,0 +1,18 @@
+@extends('layouts.app')
+@section('title', 'Kritik dan Saran')
+@section('breadcrumb', 'Kritik dan saran')
+@section('content')
+<div class="rk-page-heading rk-page-heading-v2"><div><p class="rk-eyebrow">Suaramu berarti</p><h1>Kritik dan saran</h1><p>Masukanmu dikaitkan dengan akunmu dan hanya dapat dilihat olehmu serta tim RotiKita.</p></div></div>
+@if(!$customer)<div class="rk-alert rk-alert-error" role="alert">Profil pelanggan belum tersedia sehingga masukan tidak dapat dikirim. Hubungi admin untuk memperbaiki akun.</div>@else
+<section class="rk-panel rk-panel-v2"><div class="rk-panel-heading"><div><h2>Kirim masukan</h2><p>Pilih jenis, isi pesan minimal 10 karakter, dan tautkan pesanan jika relevan.</p></div></div>
+<form method="POST" action="{{ route('customer.feedback.store') }}">@csrf<div class="rk-real-form-grid">
+<label class="rk-field"><span>Jenis masukan</span><select name="type" required><option value="">Pilih jenis</option><option value="complaint" @selected(old('type')==='complaint')>Keluhan</option><option value="suggestion" @selected(old('type')==='suggestion')>Saran</option><option value="review" @selected(old('type')==='review')>Ulasan</option></select>@error('type')<small class="rk-field-error">{{ $message }}</small>@enderror</label>
+<label class="rk-field"><span>Pesanan (opsional)</span><select name="order_id"><option value="">Tidak terkait pesanan</option>@foreach($orders as $order)<option value="{{ $order->id }}" @selected((string)old('order_id')===(string)$order->id)>{{ $order->order_number }}</option>@endforeach</select>@error('order_id')<small class="rk-field-error">{{ $message }}</small>@enderror</label>
+<label class="rk-field"><span>Rating (opsional)</span><select name="rating"><option value="">Tidak memberi rating</option>@for($rating=1;$rating<=5;$rating++)<option value="{{ $rating }}" @selected((string)old('rating')===(string)$rating)>{{ $rating }} dari 5</option>@endfor</select>@error('rating')<small class="rk-field-error">{{ $message }}</small>@enderror</label>
+<label class="rk-field rk-span-2"><span>Pesan</span><textarea name="message" rows="5" minlength="10" maxlength="5000" required>{{ old('message') }}</textarea>@error('message')<small class="rk-field-error">{{ $message }}</small>@enderror</label>
+</div><div class="rk-real-form-footer"><button class="rk-btn" type="submit">Kirim masukan</button></div></form></section>
+@endif
+<section class="rk-panel rk-panel-v2 rk-mt-18"><div class="rk-panel-heading"><div><h2>Masukan sebelumnya</h2><p>Riwayat yang dikirim dari akun ini.</p></div></div>
+@forelse($feedbacks as $feedback)<article class="rk-feedback-history"><div class="rk-panel-heading"><div><strong>{{ ucfirst($feedback->type==='complaint'?'Keluhan':($feedback->type==='suggestion'?'Saran':'Ulasan')) }}</strong><small class="rk-cell-sub">{{ $feedback->created_at->format('d M Y · H:i') }}@if($feedback->order) · {{ $feedback->order->order_number }}@endif</small></div><span class="rk-badge rk-badge-{{ $feedback->status==='in_progress'?'processing':$feedback->status }}">{{ ucfirst(str_replace('_',' ',$feedback->status)) }}</span></div><p>{{ $feedback->message }}</p>@if($feedback->rating)<small>Rating: {{ $feedback->rating }}/5</small>@endif @if($feedback->response)<div class="rk-alert rk-alert-success"><strong>Tanggapan RotiKita</strong><p>{{ $feedback->response }}</p></div>@endif</article>@empty<div class="rk-real-empty"><strong>Belum ada masukan</strong><p>Masukan yang kamu kirim akan tercatat di sini.</p></div>@endforelse
+@if(method_exists($feedbacks,'links'))<div class="rk-real-pagination">{{ $feedbacks->links() }}</div>@endif</section>
+@endsection

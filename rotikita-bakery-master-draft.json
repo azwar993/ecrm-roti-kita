@@ -1,0 +1,1279 @@
+﻿{
+    "status_dokumen":  "DRAFT â€” tidak untuk impor otomatis",
+    "audit_database":  {
+                           "koneksi":  "mysql",
+                           "database":  "ecrm_roti_kita",
+                           "jumlah_produk_saat_audit":  0,
+                           "sku_rot_001_ditemukan":  false,
+                           "sku_rot_002_ditemukan":  false,
+                           "catatan":  "Audit SELECT read-only. Database aktif tidak berisi baris produk; kode ROT-001 dan ROT-002 tetap dicadangkan sesuai instruksi."
+                       },
+    "jumlah_produk_dalam_daftar_pengguna":  54,
+    "reserved_sku":  [
+                         {
+                             "sku":  "ROT-001",
+                             "nama_dilaporkan":  "Roti Cokelat",
+                             "status_database_aktif":  "Tidak ditemukan",
+                             "tindakan":  "Pertahankan; baris draft kandidat bukan instruksi membuat ulang atau mengubah produk."
+                         },
+                         {
+                             "sku":  "ROT-002",
+                             "nama_dilaporkan":  "Coklat Dubai",
+                             "status_database_aktif":  "Tidak ditemukan",
+                             "tindakan":  "Cadangkan; tidak dialokasikan ke produk lain. Produk ini tidak ada dalam daftar 54 item yang diberikan."
+                         }
+                     ],
+    "produk":  [
+                   {
+                       "sku_usulan":  "ROT-001",
+                       "nama_produk":  "Roti Cokelat",
+                       "kategori_usulan":  "Roti Manis",
+                       "harga_usulan_idr":  12000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Roti Cokelat\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu pencocokan ROT-001; jangan impor sebagai produk baru",
+                       "stock_qty":  null,
+                       "catatan":  "ROT-001 dilaporkan sebagai Roti Cokelat pada katalog sebelumnya; record tidak ditemukan pada MySQL aktif. Pertahankan kode dan cocokkan record sebelum tindakan.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Needs visual review",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Chocolate loaf cocok pada rasa/kategori umum, tetapi bentuk produk RotiKita dan kecocokan SKU reserved belum dikonfirmasi.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-003",
+                       "nama_produk":  "Roti Keju",
+                       "kategori_usulan":  "Roti Manis",
+                       "harga_usulan_idr":  13000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Roti Keju\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Needs visual review",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Cheese-topped bread rolls cocok bahan dan kelompok roti; gaya sarapan gurih/jenis topping berbeda belum dikonfirmasi untuk Roti Keju.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-004",
+                       "nama_produk":  "Roti Cokelat Keju",
+                       "kategori_usulan":  "Roti Manis",
+                       "harga_usulan_idr":  15000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Roti Cokelat Keju\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-005",
+                       "nama_produk":  "Roti Pisang Cokelat",
+                       "kategori_usulan":  "Roti Manis",
+                       "harga_usulan_idr":  14000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Roti Pisang Cokelat\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-006",
+                       "nama_produk":  "Roti Pisang Keju",
+                       "kategori_usulan":  "Roti Manis",
+                       "harga_usulan_idr":  15000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Roti Pisang Keju\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-007",
+                       "nama_produk":  "Roti Abon Sapi",
+                       "kategori_usulan":  "Roti Manis",
+                       "harga_usulan_idr":  17000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Roti Abon Sapi\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-008",
+                       "nama_produk":  "Roti Sosis",
+                       "kategori_usulan":  "Roti Manis",
+                       "harga_usulan_idr":  16000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Roti Sosis\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-009",
+                       "nama_produk":  "Roti Smoked Beef Cheese",
+                       "kategori_usulan":  "Roti Manis",
+                       "harga_usulan_idr":  19000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Roti Smoked Beef Cheese\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-010",
+                       "nama_produk":  "Roti Kelapa",
+                       "kategori_usulan":  "Roti Manis",
+                       "harga_usulan_idr":  12000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Roti Kelapa\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-011",
+                       "nama_produk":  "Roti Kismis",
+                       "kategori_usulan":  "Roti Manis",
+                       "harga_usulan_idr":  14000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Roti Kismis\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Not suitable",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Sumber menjelaskan savory raisin bread dengan herbs; tidak cocok sebagai Roti Kismis kategori Roti Manis. Kandidat lama dipertahankan untuk jejak audit.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-012",
+                       "nama_produk":  "Roti Sisir Butter",
+                       "kategori_usulan":  "Roti Manis",
+                       "harga_usulan_idr":  18000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Roti Sisir Butter\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-013",
+                       "nama_produk":  "Roti Mocca Meses",
+                       "kategori_usulan":  "Roti Manis",
+                       "harga_usulan_idr":  13000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Roti Mocca Meses\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-014",
+                       "nama_produk":  "Roti Tawar Original",
+                       "kategori_usulan":  "Roti Tawar",
+                       "harga_usulan_idr":  23000,
+                       "satuan_penjualan_usulan":  "loaf",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Roti Tawar Original\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-015",
+                       "nama_produk":  "Roti Tawar Susu",
+                       "kategori_usulan":  "Roti Tawar",
+                       "harga_usulan_idr":  25000,
+                       "satuan_penjualan_usulan":  "loaf",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Roti Tawar Susu\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-016",
+                       "nama_produk":  "Roti Gandum",
+                       "kategori_usulan":  "Roti Tawar",
+                       "harga_usulan_idr":  28000,
+                       "satuan_penjualan_usulan":  "loaf",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Roti Gandum\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Whole-wheat loaf sesuai kategori Roti Tawar/Roti Gandum; bentuk spesifik RotiKita belum diketahui.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-017",
+                       "nama_produk":  "Roti Sobek",
+                       "kategori_usulan":  "Roti Tawar",
+                       "harga_usulan_idr":  25000,
+                       "satuan_penjualan_usulan":  "loaf (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Roti Sobek\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-018",
+                       "nama_produk":  "Butter Croissant",
+                       "kategori_usulan":  "Pastry",
+                       "harga_usulan_idr":  18000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Butter Croissant\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Croissant polos sesuai jenis produk.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-019",
+                       "nama_produk":  "Chocolate Croissant",
+                       "kategori_usulan":  "Pastry",
+                       "harga_usulan_idr":  22000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Chocolate Croissant\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Chocolate croissant sesuai jenis dan rasa; konteks kopi/plating bukan atribut produk.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-020",
+                       "nama_produk":  "Almond Croissant",
+                       "kategori_usulan":  "Pastry",
+                       "harga_usulan_idr":  26000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Almond Croissant\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Almond croissant sesuai jenis dan topping.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-021",
+                       "nama_produk":  "Pain au Chocolat",
+                       "kategori_usulan":  "Pastry",
+                       "harga_usulan_idr":  22000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Pain au Chocolat\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Pain au chocolat sesuai jenis dan rasa.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-022",
+                       "nama_produk":  "Danish Strawberry",
+                       "kategori_usulan":  "Pastry",
+                       "harga_usulan_idr":  20000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Danish Strawberry\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Needs visual review",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Sumber menyebut berry Danish dengan strawberry di atas. Buah/topping terlihat pada foto, tetapi isian strawberry tidak terbukti; jangan sebut atau tampilkan sebagai isian strawberry sebelum tim memastikan.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-023",
+                       "nama_produk":  "Cinnamon Roll",
+                       "kategori_usulan":  "Pastry",
+                       "harga_usulan_idr":  19000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Cinnamon Roll\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Cinnamon rolls jelas disebut pada halaman sumber; frosting dan bentuk aktual RotiKita dapat berbeda.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-024",
+                       "nama_produk":  "Apple Turnover",
+                       "kategori_usulan":  "Pastry",
+                       "harga_usulan_idr":  18000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Apple Turnover\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Source unavailable",
+                                            "visual_fit":  "Needs visual review",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "URL foto langsung belum diverifikasi. Jangan render preview atau gunakan foto sampai URL file asli bisa dibuktikan.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-025",
+                       "nama_produk":  "Sausage Roll",
+                       "kategori_usulan":  "Pastry",
+                       "harga_usulan_idr":  20000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Sausage Roll\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Sausage rolls pastry disebut jelas dan cocok kategori Pastry.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-026",
+                       "nama_produk":  "Garlic Cheese Pastry",
+                       "kategori_usulan":  "Pastry",
+                       "harga_usulan_idr":  20000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Garlic Cheese Pastry\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-027",
+                       "nama_produk":  "Donat Gula",
+                       "kategori_usulan":  "Donat",
+                       "harga_usulan_idr":  8000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Donat Gula\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Donat dusted powdered sugar cocok sebagai ilustrasi donat gula; bentuk taburan dapat berbeda.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-028",
+                       "nama_produk":  "Donat Cokelat Meses",
+                       "kategori_usulan":  "Donat",
+                       "harga_usulan_idr":  10000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Donat Cokelat Meses\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Chocolate donuts dengan sprinkles sesuai donat cokelat meses secara visual.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-029",
+                       "nama_produk":  "Donat Keju",
+                       "kategori_usulan":  "Donat",
+                       "harga_usulan_idr":  11000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Donat Keju\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-030",
+                       "nama_produk":  "Donat Tiramisu",
+                       "kategori_usulan":  "Donat",
+                       "harga_usulan_idr":  12000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Donat Tiramisu\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-031",
+                       "nama_produk":  "Bomboloni Vanilla",
+                       "kategori_usulan":  "Donat",
+                       "harga_usulan_idr":  12000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Bomboloni Vanilla\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Needs visual review",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Foto menunjukkan assorted filled doughnuts dengan cream/jam; rasa vanilla tidak dapat dibuktikan. Jangan label sebagai Bomboloni Vanilla.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-032",
+                       "nama_produk":  "Bomboloni Cokelat",
+                       "kategori_usulan":  "Donat",
+                       "harga_usulan_idr":  13000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Bomboloni Cokelat\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Needs visual review",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Foto menunjukkan assorted filled doughnuts dengan cream/jam; rasa cokelat tidak dapat dibuktikan. Jangan label sebagai Bomboloni Cokelat.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-033",
+                       "nama_produk":  "Brownies Cokelat Slice",
+                       "kategori_usulan":  "Cake \u0026 Dessert",
+                       "harga_usulan_idr":  18000,
+                       "satuan_penjualan_usulan":  "slice",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Brownies Cokelat Slice\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Needs visual review",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Brownies sesuai, tetapi sumber memperlihatkan coffee beans dan cream sebagai garnish; garnish produk belum dikonfirmasi.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-034",
+                       "nama_produk":  "Brownies Loyang 20 Ã— 10 cm",
+                       "kategori_usulan":  "Cake \u0026 Dessert",
+                       "harga_usulan_idr":  85000,
+                       "satuan_penjualan_usulan":  "loyang 20 Ã— 10 cm",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Brownies Loyang 20 Ã— 10 cm\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Needs visual review",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Brownies potong terlihat, tetapi foto tidak menunjukkan brownies satu loyang atau ukuran 20 × 10 cm.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-035",
+                       "nama_produk":  "Chocolate Cake Slice",
+                       "kategori_usulan":  "Cake \u0026 Dessert",
+                       "harga_usulan_idr":  23000,
+                       "satuan_penjualan_usulan":  "slice",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Chocolate Cake Slice\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Irisan chocolate cake sesuai; garnish strawberry bukan atribut yang diklaim untuk produk.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-036",
+                       "nama_produk":  "Red Velvet Cake Slice",
+                       "kategori_usulan":  "Cake \u0026 Dessert",
+                       "harga_usulan_idr":  26000,
+                       "satuan_penjualan_usulan":  "slice",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Red Velvet Cake Slice\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Irisan red velvet sesuai nama produk; berries adalah garnish foto.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-037",
+                       "nama_produk":  "Cheesecake Slice",
+                       "kategori_usulan":  "Cake \u0026 Dessert",
+                       "harga_usulan_idr":  28000,
+                       "satuan_penjualan_usulan":  "slice",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Cheesecake Slice\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Classic cheesecake slice sesuai produk generik Cheesecake Slice.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-038",
+                       "nama_produk":  "Tiramisu Cup",
+                       "kategori_usulan":  "Cake \u0026 Dessert",
+                       "harga_usulan_idr":  25000,
+                       "satuan_penjualan_usulan":  "cup",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Tiramisu Cup\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Tiramisu dalam gelas sesuai format Tiramisu Cup.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-039",
+                       "nama_produk":  "Banana Cake Slice",
+                       "kategori_usulan":  "Cake \u0026 Dessert",
+                       "harga_usulan_idr":  15000,
+                       "satuan_penjualan_usulan":  "slice",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Banana Cake Slice\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Needs visual review",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Banana cake slice sesuai jenis dasar, namun topping caramel, pecan, dan blueberry belum dikonfirmasi.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-040",
+                       "nama_produk":  "Marble Cake Slice",
+                       "kategori_usulan":  "Cake \u0026 Dessert",
+                       "harga_usulan_idr":  16000,
+                       "satuan_penjualan_usulan":  "slice",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Marble Cake Slice\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Irisan marble cake dengan swirl cokelat-vanila sesuai nama.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-041",
+                       "nama_produk":  "Chiffon Pandan Slice",
+                       "kategori_usulan":  "Cake \u0026 Dessert",
+                       "harga_usulan_idr":  16000,
+                       "satuan_penjualan_usulan":  "slice",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Chiffon Pandan Slice\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Irisan chiffon pandan hijau sesuai nama dan kategori.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-042",
+                       "nama_produk":  "Black Forest 15 cm",
+                       "kategori_usulan":  "Cake \u0026 Dessert",
+                       "harga_usulan_idr":  190000,
+                       "satuan_penjualan_usulan":  "cake diameter 15 cm",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Black Forest 15 cm\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Black Forest sesuai jenis, namun ukuran 15 cm tidak bisa dibuktikan. Foto dibagikan dengan ROT-043; bukan foto unik ukuran ini.",
+                                            "shared_photo_group":  "SHARED-ROT042-043",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-043",
+                       "nama_produk":  "Black Forest 20 cm",
+                       "kategori_usulan":  "Cake \u0026 Dessert",
+                       "harga_usulan_idr":  285000,
+                       "satuan_penjualan_usulan":  "cake diameter 20 cm",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Black Forest 20 cm\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Black Forest sesuai jenis, namun ukuran 20 cm tidak bisa dibuktikan. Foto dibagikan dengan ROT-042; bukan foto unik ukuran ini.",
+                                            "shared_photo_group":  "SHARED-ROT042-043",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-044",
+                       "nama_produk":  "Chocolate Chip Cookie",
+                       "kategori_usulan":  "Cookies",
+                       "harga_usulan_idr":  10000,
+                       "satuan_penjualan_usulan":  "pcs",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Chocolate Chip Cookie\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Chocolate chip cookies sesuai nama.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-045",
+                       "nama_produk":  "Butter Cookies",
+                       "kategori_usulan":  "Cookies",
+                       "harga_usulan_idr":  70000,
+                       "satuan_penjualan_usulan":  "toples 250 g",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Butter Cookies\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Needs visual review",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Butter cookies cocok, tetapi foto menonjolkan tin/kemasan yang mungkin tidak sama dengan toples jualan RotiKita.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-046",
+                       "nama_produk":  "Nastar",
+                       "kategori_usulan":  "Cookies",
+                       "harga_usulan_idr":  85000,
+                       "satuan_penjualan_usulan":  "toples 250 g",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Nastar\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Sumber menyebut Indonesian pineapple tarts/Nastar; flat lay juga menyertakan bahan.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-047",
+                       "nama_produk":  "Kastengel",
+                       "kategori_usulan":  "Cookies",
+                       "harga_usulan_idr":  95000,
+                       "satuan_penjualan_usulan":  "toples 250 g",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Kastengel\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-048",
+                       "nama_produk":  "Sagu Keju",
+                       "kategori_usulan":  "Cookies",
+                       "harga_usulan_idr":  75000,
+                       "satuan_penjualan_usulan":  "toples 250 g",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Sagu Keju\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-049",
+                       "nama_produk":  "Putri Salju",
+                       "kategori_usulan":  "Cookies",
+                       "harga_usulan_idr":  75000,
+                       "satuan_penjualan_usulan":  "toples 250 g",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Putri Salju\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-050",
+                       "nama_produk":  "Bolen Pisang",
+                       "kategori_usulan":  "Snack Bakery",
+                       "harga_usulan_idr":  12000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Bolen Pisang\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-051",
+                       "nama_produk":  "Pie Susu",
+                       "kategori_usulan":  "Snack Bakery",
+                       "harga_usulan_idr":  8000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Pie Susu\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Belum tersedia; foto aktual atau lisensi sumber belum diverifikasi",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "No candidate",
+                                            "visual_fit":  null,
+                                            "internal_approval":  null,
+                                            "review_note":  "Belum ada kandidat foto.",
+                                            "shared_photo_group":  null,
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-052",
+                       "nama_produk":  "Muffin Cokelat",
+                       "kategori_usulan":  "Snack Bakery",
+                       "harga_usulan_idr":  14000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Muffin Cokelat\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Sumber menyebut chocolate muffins dalam silicone cupcake molds; tidak ada frosting yang disebut. Foto adalah muffin di liner/cetakan, bukan cupcake berfrosting.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-053",
+                       "nama_produk":  "Muffin Blueberry",
+                       "kategori_usulan":  "Snack Bakery",
+                       "harga_usulan_idr":  15000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Muffin Blueberry\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Kandidat lebih tajam: halaman sumber menyebut blueberry muffins cooling on rack, 6048 × 4024, kamera Nikon Z 6. Tidak ada frosting yang disebut.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+                                                               {
+                                                                   "source_status":  "Candidate",
+                                                                   "source_url":  "https://www.pexels.com/photo/close-up-shot-of-a-blueberry-muffin-10225266/",
+                                                                   "image_url":  "https://images.pexels.com/photos/10225266/pexels-photo-10225266.jpeg?cs=srgb\u0026dl=pexels-sena-124841843-10225266.jpg\u0026fm=jpg",
+                                                                   "photographer":  "Sena",
+                                                                   "license":  "Pexels License; free commercial use per source and platform license",
+                                                                   "visual_fit":  "Needs visual review",
+                                                                   "internal_approval":  "Awaiting team approval",
+                                                                   "review_note":  "Kandidat lama Sena tetap disimpan sebagai alternatif; resolusi sumber 3265 × 4898. Kandidat utama baru memiliki metadata kamera/resolusi lebih jelas."
+                                                               }
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-054",
+                       "nama_produk":  "Mini Pizza Bread",
+                       "kategori_usulan":  "Snack Bakery",
+                       "harga_usulan_idr":  15000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Mini Pizza Bread\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Mini bread pizzas sesuai nama/kategori; topping produk RotiKita belum diketahui.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   },
+                   {
+                       "sku_usulan":  "ROT-055",
+                       "nama_produk":  "Mini Quiche",
+                       "kategori_usulan":  "Snack Bakery",
+                       "harga_usulan_idr":  18000,
+                       "satuan_penjualan_usulan":  "pcs (usulan; konfirmasi)",
+                       "deskripsi_singkat":  "Deskripsi awal berdasarkan nama \"Mini Quiche\"; resep, komposisi, dan alergen belum dikonfirmasi.",
+                       "status_persetujuan_harga":  "Menunggu persetujuan",
+                       "status_kesiapan_foto":  "Kandidat Foto Ilustrasi ditemukan; menunggu persetujuan internal",
+                       "status_kesiapan_produk":  "Menunggu konfirmasi ketersediaan dan stok",
+                       "stock_qty":  null,
+                       "catatan":  "Draft saja; SKU belum dialokasikan ke database.",
+                       "photo_review":  {
+                                            "source_status":  "Kandidat stok; menunggu persetujuan",
+                                            "visual_fit":  "Suitable illustration candidate",
+                                            "internal_approval":  "Awaiting team approval",
+                                            "review_note":  "Mini quiches sesuai nama produk.",
+                                            "shared_photo_group":  "",
+                                            "alternates":  [
+
+                                                           ]
+                                        }
+                   }
+               ]
+}

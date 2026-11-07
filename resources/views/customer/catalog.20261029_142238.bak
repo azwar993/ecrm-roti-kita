@@ -1,0 +1,47 @@
+@extends('layouts.app')
+@section('title', 'Katalog RotiKita')
+@section('breadcrumb', 'Katalog')
+@section('content')
+<div class="rk-page-heading rk-page-heading-v2">
+    <div><p class="rk-eyebrow">Produk dari database</p><h1>Katalog RotiKita</h1><p>Produk aktif yang dikelola admin. Harga, deskripsi, stok, dan foto dibaca dari MySQL.</p></div>
+</div>
+
+<section class="rk-real-catalog-hero"><div><span class="rk-mini-label">FRESH FROM THE OVEN</span><h2>Temukan favoritmu,<br><em>dibuat sepenuh hati.</em></h2><p>Katalog ini mengikuti produk aktual yang sedang diaktifkan oleh admin RotiKita.</p></div><div class="rk-real-hero-badge" aria-hidden="true">R<br><small>BAKED DAILY</small></div></section>
+
+<section class="rk-real-catalog-section">
+    <div class="rk-section-heading"><div><p class="rk-eyebrow">Katalog produk</p><h2>Semua pilihan</h2><p>{{ $products->total() }} produk aktif ditemukan.</p></div></div>
+    <form class="rk-real-toolbar rk-real-catalog-toolbar" method="GET" action="{{ route('customer.catalog') }}">
+        <label class="rk-search"><span>⌕</span><input type="search" name="q" value="{{ $search }}" placeholder="Cari nama, SKU, atau deskripsi…"></label>
+        <select class="rk-select" name="category" aria-label="Filter kategori">
+            <option value="">Semua kategori</option>
+            @foreach($categories as $item)<option value="{{ $item }}" @selected($category === $item)>{{ $item }}</option>@endforeach
+        </select>
+        <button class="rk-btn rk-btn-small" type="submit">Cari produk</button>
+        @if($search !== '' || $category !== '')<a class="rk-btn rk-btn-quiet rk-btn-small" href="{{ route('customer.catalog') }}">Reset</a>@endif
+    </form>
+
+    <div class="rk-real-catalog-grid">
+        @forelse($products as $product)
+            <article class="rk-real-catalog-card">
+                <div class="rk-real-catalog-image-wrap">
+                    @if($product->image_path)
+                        <img class="rk-real-catalog-image" src="{{ asset('storage/'.$product->image_path) }}" alt="Foto {{ $product->name }}" loading="lazy">
+                    @else
+                        <div class="rk-real-catalog-no-image"><span>RotiKita</span><small>Foto belum tersedia</small></div>
+                    @endif
+                    @if($product->stock_qty === 0)<span class="rk-real-product-tag rk-real-product-tag-muted">Habis</span>@elseif($product->stock_qty <= 5)<span class="rk-real-product-tag">Stok terbatas</span>@endif
+                </div>
+                <div class="rk-real-catalog-info">
+                    <div class="rk-real-catalog-category">{{ $product->category }}</div>
+                    <h3>{{ $product->name }}</h3>
+                    <p>{{ $product->description ?: 'Produk pilihan RotiKita.' }}</p>
+                    <div class="rk-real-catalog-bottom"><strong>Rp {{ number_format((float)$product->price, 0, ',', '.') }}</strong><span>{{ $product->stock_qty > 0 ? 'Stok '.$product->stock_qty : 'Stok habis' }}</span></div>
+                </div>
+            </article>
+        @empty
+            <div class="rk-real-empty rk-real-catalog-empty"><strong>Belum ada produk yang ditampilkan.</strong><p>Produk akan muncul setelah admin menambahkan produk aktif beserta harga dan stok. Ini bukan data contoh.</p></div>
+        @endforelse
+    </div>
+    <div class="rk-real-pagination">{{ $products->links() }}</div>
+</section>
+@endsection

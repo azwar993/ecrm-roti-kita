@@ -1,0 +1,100 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Combo;
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+class StorefrontController extends Controller
+{
+    public function home(): View
+    {
+        // The landing page only shows real products stored in the database.
+        $featuredProducts = Product::query()
+            ->where('is_active', true)
+            ->orderByRaw("CASE WHEN image_path IS NOT NULL AND image_path <> '' THEN 0 ELSE 1 END")
+            ->orderByRaw('CASE WHEN stock_qty > 0 THEN 0 ELSE 1 END')
+            ->latest('id')
+            ->limit(6)
+            ->get();
+
+        $featuredCategories = Product::query()
+            ->where('is_active', true)
+            ->whereNotNull('category')
+            ->where('category', '<>', '')
+            ->select('category')
+            ->distinct()
+            ->orderBy('category')
+            ->limit(2)
+            ->pluck('category');
+
+        $featuredCombos = $this->activeCombos()
+            ->whereHas('items')
+            ->with(['items.product'])
+            ->latest('id')
+            ->limit(3)
+            ->get();
+
+        return view('storefront.home', compact('featuredProducts', 'featuredCategories', 'featuredCombos'));
+    }
+
+    public function menu(Request $request): View
+    {
+        $search = trim((string) $request->query('q', ''));
+        $category = trim((string) $request->query('category', ''));
+
+        $productQuery = Product::query()->where('is_active', true);
+
+        if ($search !== '') {
+            $productQuery->where(function ($builder) use ($search): void {
+                $builder->where('name', 'like', "%{$search}%")
+                    ->orWhere('sku', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('category', 'like', "%{$search}%");
+            });
+        }
+
+        if ($category !== '') {
+            $productQuery->where('category', $category);
+        }
+
+        $products = $productQuery
+            ->orderByRaw('CASE WHEN stock_qty > 0 THEN 0 ELSE 1 END')
+            ->latest('id')
+            ->paginate(12)
+            ->withQueryString();
+
+        $categories = Product::query()
+            ->where('is_active', true)
+            ->whereNotNull('category')
+            ->where('category', '<>', '')
+            ->select('category')
+            ->distinct()
+            ->orderBy('category')
+            ->pluck('category');
+
+        $combos = $this->activeCombos()
+            ->whereHas('items')
+            ->with(['items.product'])
+            ->latest('id')
+            ->get();
+
+        return view('storefront.menu', compact('products', 'categories', 'search', 'category', 'combos'));
+    }
+
+    private function activeCombos()
+    {
+        $now = now();
+
+        return Combo::query()
+            ->where('is_active', true)
+            ->where(function ($builder) use ($now): void {
+                $builder->whereNull('starts_at')->orWhere('starts_at', '<=', $now);
+            })
+            ->where(function ($builder) use ($now): void {
+                $builder->whereNull('ends_at')->orWhere('ends_at', '>=', $now);
+            });
+    }
+}
