@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\ProductImageResolver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -61,8 +62,13 @@ class Product extends Model
     /**
      * Daftar komposisi combo yang menggunakan produk ini.
      */
-    public function comboItems(): HasMany     
+    public function comboItems(): HasMany
     {
         return $this->hasMany(ComboItem::class);
+    }
+
+    public function displayImagePath(): ?string
+    {
+        return (new ProductImageResolver)->resolve($this);
     }
 }

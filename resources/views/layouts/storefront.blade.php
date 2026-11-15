@@ -14,6 +14,7 @@
     @if(trim($__env->yieldContent('seo_title')) !== '')<meta property="og:title" content="{{ trim($__env->yieldContent('seo_title')) }}">@endif
     <link rel="stylesheet" href="{{ asset('css/rotikita.css') }}?v={{ filemtime(public_path('css/rotikita.css')) }}">
     <link rel="stylesheet" href="{{ asset('css/rotikita-storefront.css') }}?v={{ filemtime(public_path('css/rotikita-storefront.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/rotikita-reconstruction.css') }}?v={{ filemtime(public_path('css/rotikita-reconstruction.css')) }}">
     <link rel="stylesheet" href="{{ asset('css/rotikita-account-menu.css') }}?v={{ filemtime(public_path('css/rotikita-account-menu.css')) }}">
     <link rel="stylesheet" href="{{ asset('css/page-transitions.css') }}?v={{ filemtime(public_path('css/page-transitions.css')) }}">
     <script>try{const k='rotikita:page-navigation',t=Number(sessionStorage.getItem(k));if(t>0&&Date.now()-t<15000&&performance.getEntriesByType('navigation')[0]?.type!=='back_forward'){document.documentElement.classList.add('rks-navigation-pending');setTimeout(()=>{document.documentElement.classList.remove('rks-navigation-pending');sessionStorage.removeItem(k)},15000)}else sessionStorage.removeItem(k)}catch{}</script>
@@ -38,15 +39,22 @@
 
         <nav class="rks-nav" id="rks-main-nav" aria-label="Navigasi utama">
             <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'is-active' : '' }}">Beranda</a>
-            <a href="{{ route('storefront.menu') }}" class="{{ request()->routeIs('storefront.menu') ? 'is-active' : '' }}">Menu bakery</a>
+            <a href="{{ route('storefront.menu') }}" class="{{ request()->routeIs('storefront.menu') ? 'is-active' : '' }}">Menu</a>
             <a href="{{ route('storefront.promotions') }}" class="{{ request()->routeIs('storefront.promotions') ? 'is-active' : '' }}">Promo</a>
+            <a href="{{ route('storefront.about') }}" class="{{ request()->routeIs('storefront.about') ? 'is-active' : '' }}">Tentang Kami</a>
+            <a href="{{ route('articles.index') }}" class="{{ request()->routeIs('articles.*') ? 'is-active' : '' }}">Artikel</a>
+            <form class="rks-nav-search" method="GET" action="{{ route('storefront.menu') }}" role="search">
+                <label class="rks-sr-only" for="storefront-search">Cari produk</label>
+                <input id="storefront-search" type="search" name="q" value="{{ request('q') }}" placeholder="Cari produk">
+                <button type="submit" aria-label="Cari produk"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m16 16 4.4 4.4"/></svg></button>
+            </form>
+        </nav>
+
+        <div class="rks-header-actions">
             <a href="{{ route('customer.cart') }}" class="rks-cart-link {{ request()->routeIs('customer.cart*') ? 'is-active' : '' }}">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 10.1a2 2 0 0 0 2 1.6h8.5a2 2 0 0 0 1.9-1.4L22 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>
                 Keranjang <span class="rks-cart-count">{{ $storeCartCount }}</span>
             </a>
-        </nav>
-
-        <div class="rks-header-actions">
             @auth
                 @php($accountUser = auth()->user())
                 <div class="rks-account-menu" data-account-menu>
@@ -163,26 +171,11 @@
             @if (filter_var(config('rotikita-contact.email'), FILTER_VALIDATE_EMAIL))
                 <a href="mailto:{{ config('rotikita-contact.email') }}">{{ config('rotikita-contact.email') }}</a>
             @endif
-            @if (filled(config('rotikita-contact.whatsapp')))
-                @php($whatsappNumber = preg_replace('/\D+/', '', (string) config('rotikita-contact.whatsapp')))
-                @if ($whatsappNumber !== '')
-                    <a href="https://wa.me/{{ $whatsappNumber }}" target="_blank" rel="noopener noreferrer">WhatsApp RotiKita</a>
-                @endif
-            @endif
-            @if (filled(config('rotikita-contact.address')))
-                <a href="https://www.google.com/maps/search/?api=1&amp;query={{ urlencode(config('rotikita-contact.address')) }}" target="_blank" rel="noopener noreferrer">{{ config('rotikita-contact.address') }}</a>
-            @endif
-            @if (filled(config('rotikita-contact.opening_hours')))
-                <p>{{ config('rotikita-contact.opening_hours') }}</p>
-            @endif
-            @if (!filled(config('rotikita-contact.email')) && !filled(config('rotikita-contact.whatsapp')) && !filled(config('rotikita-contact.address')) && !filled(config('rotikita-contact.opening_hours')))
-                <p>Informasi kontak toko akan ditampilkan setelah dikonfigurasi.</p>
-            @endif
         </section>
         <section class="rks-footer-column">
-            <h2>Ikuti Kami</h2>
+            <h2>Ikuti Keseruan</h2>
             @include('storefront.partials.social-links')
-            @if (!filled(config('rotikita-contact.instagram')) && !filled(config('rotikita-contact.tiktok')) && !filled(config('rotikita-contact.facebook')) && !filled(config('rotikita-contact.youtube')))
+            @if (!filled(config('rotikita-contact.instagram')) && !filled(config('rotikita-contact.tiktok')))
                 <p>Akun media sosial resmi belum dikonfigurasi.</p>
             @endif
         </section>
@@ -191,10 +184,8 @@
         <span>© {{ date('Y') }} RotiKita Bakery</span>
         <span>Roti Hangat Setiap Hari</span>
     </div>
+    @include('components.group-identity')
 </footer>
-@if (filled(config('rotikita-contact.whatsapp')) && preg_replace('/\D+/', '', (string) config('rotikita-contact.whatsapp')) !== '')
-    <a class="rks-whatsapp-float" href="https://wa.me/{{ preg_replace('/\D+/', '', (string) config('rotikita-contact.whatsapp')) }}" target="_blank" rel="noopener noreferrer" aria-label="Hubungi RotiKita melalui WhatsApp">WhatsApp</a>
-@endif
 <script src="{{ asset('js/rotikita-storefront.js') }}?v={{ filemtime(public_path('js/rotikita-storefront.js')) }}" defer></script>
 <script src="{{ asset('js/rotikita-cart.js') }}?v={{ filemtime(public_path('js/rotikita-cart.js')) }}" defer></script>
 <script src="{{ asset('js/rotikita-account-menu.js') }}?v={{ filemtime(public_path('js/rotikita-account-menu.js')) }}" defer></script>

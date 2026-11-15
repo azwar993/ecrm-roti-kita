@@ -24,15 +24,19 @@ class ComboController extends Controller
             $query->where(fn ($builder) => $builder->where('name', 'like', "%{$search}%")
                 ->orWhere('sku', 'like', "%{$search}%"));
         }
-        if ($status === 'active') $query->where('is_active', true);
-        if ($status === 'inactive') $query->where('is_active', false);
+        if ($status === 'active') {
+            $query->where('is_active', true);
+        }
+        if ($status === 'inactive') {
+            $query->where('is_active', false);
+        }
 
         return view('admin.combos', ['combos' => $query->paginate(12)->withQueryString(), 'search' => $search, 'status' => $status]);
     }
 
     public function create(): View
     {
-        return view('admin.combo-form', ['combo' => new Combo(), 'products' => Product::query()->orderBy('name')->get()]);
+        return view('admin.combo-form', ['combo' => new Combo, 'products' => Product::query()->orderBy('name')->get()]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -48,7 +52,9 @@ class ComboController extends Controller
                 $combo->products()->sync($items);
             }, 3);
         } catch (\Throwable $exception) {
-            if ($imagePath) Storage::disk('public')->delete($imagePath);
+            if ($imagePath) {
+                Storage::disk('public')->delete($imagePath);
+            }
             throw $exception;
         }
 
@@ -58,6 +64,7 @@ class ComboController extends Controller
     public function edit(Combo $combo): View
     {
         $combo->load('items');
+
         return view('admin.combo-form', ['combo' => $combo, 'products' => Product::query()->orderBy('name')->get()]);
     }
 
@@ -67,7 +74,9 @@ class ComboController extends Controller
         unset($data['image']);
         $oldImage = $combo->image_path;
         $imagePath = $request->file('image')?->store('combos', 'public');
-        if ($imagePath) $data['image_path'] = $imagePath;
+        if ($imagePath) {
+            $data['image_path'] = $imagePath;
+        }
 
         try {
             DB::transaction(function () use ($combo, $data, $items): void {
@@ -76,10 +85,14 @@ class ComboController extends Controller
                 $lockedCombo->products()->sync($items);
             }, 3);
         } catch (\Throwable $exception) {
-            if ($imagePath) Storage::disk('public')->delete($imagePath);
+            if ($imagePath) {
+                Storage::disk('public')->delete($imagePath);
+            }
             throw $exception;
         }
-        if ($imagePath && $oldImage) Storage::disk('public')->delete($oldImage);
+        if ($imagePath && $oldImage) {
+            Storage::disk('public')->delete($oldImage);
+        }
 
         return redirect()->route('admin.combos.index')->with('success', 'Perubahan combo berhasil disimpan.');
     }
@@ -88,21 +101,42 @@ class ComboController extends Controller
     {
         if ($combo->orderItems()->exists()) {
             $combo->update(['is_active' => false]);
+
             return back()->with('success', 'Combo sudah tercatat pada pesanan; combo dinonaktifkan agar riwayat tetap utuh.');
         }
 
         $imagePath = $combo->image_path;
         $combo->delete();
-        if ($imagePath) Storage::disk('public')->delete($imagePath);
+        if ($imagePath) {
+            Storage::disk('public')->delete($imagePath);
+        }
 
         return redirect()->route('admin.combos.index')->with('success', 'Combo yang belum dipesan berhasil dihapus.');
     }
 
     public function toggleActive(Combo $combo): RedirectResponse
     {
-        $combo->is_active = ! $combo->is_active;
-        $combo->save();
-        return back()->with('success', $combo->is_active ? 'Combo diaktifkan.' : 'Combo dinonaktifkan.');
+        $isActive = DB::transaction(function () use ($combo): bool {
+            $lockedCombo = Combo::query()->whereKey($combo->id)->lockForUpdate()->firstOrFail();
+
+            if (! $lockedCombo->is_active) {
+                $hasUnavailableComponent = $lockedCombo->items()
+                    ->whereHas('product', fn ($query) => $query->where('is_active', false))
+                    ->exists();
+
+                if ($hasUnavailableComponent) {
+                    throw ValidationException::withMessages([
+                        'combo' => 'Combo tidak dapat diaktifkan karena memiliki produk komponen nonaktif.',
+                    ]);
+                }
+            }
+
+            $lockedCombo->update(['is_active' => ! $lockedCombo->is_active]);
+
+            return $lockedCombo->is_active;
+        }, 3);
+
+        return back()->with('success', $isActive ? 'Combo diaktifkan.' : 'Combo dinonaktifkan.');
     }
 
     private function validatedData(Request $request, ?Combo $combo = null): array

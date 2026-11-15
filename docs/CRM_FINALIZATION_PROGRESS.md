@@ -1,10 +1,15 @@
-# CRM Finalization Progress — Stage 1
+﻿# CRM Finalization Progress — Stage 1
 
 ## Artikel
 
 Migration additive `2026_11_03_000001_add_metadata_to_articles_table.php` menambah `category` (nullable string, 80 karakter), `seo_title` (nullable string, 180), dan `seo_description` (nullable string, 320). Migration lama tidak diubah. `down()` hanya menghapus kolom yang diperkenalkan migration ini. Model, controller admin, dan form artikel kini menerima metadata tersebut. Saat edit, metadata yang tidak dikirim dipertahankan. Kategori dibatasi pada Tips Roti, Edukasi Bakery, Tips Dapur, dan Inspirasi.
 
 Scope `published` dan pemeriksaan detail publik yang sudah ada tetap dipakai. Test mencakup draft tersembunyi, artikel published, tanggal publikasi masa depan, serta persistensi dan pelestarian metadata.
+
+Audit 2026-11-07 menemukan route admin article index mengubah tabel yang belum
+tersedia menjadi HTTP 503. Index kini aman dibuka dengan diagnostic empty state;
+form create dapat ditinjau tetapi submit dinonaktifkan sampai migration tersedia.
+Data empat artikel belum ditambahkan ke database aktif.
 
 ## Payment ledger
 
@@ -24,6 +29,10 @@ Reference memakai `payments.reference_number` yang sudah tersedia, tanpa mengara
 - Pint dijalankan dengan PHP 8.3.36 pada file yang berubah. `--dirty` tidak dapat dipakai karena workspace tidak memiliki Git metadata.
 - PHP lint lulus untuk file PHP yang berubah.
 - Migration metadata baru diuji fresh melalui RefreshDatabase dan eksplisit down/up pada SQLite.
+
+Audit artikel 2026-11-07: full suite terakhir 82 test dan 989 assertion lulus.
+Browser public article index terbuka pada desktop/mobile dengan empty state;
+publikasi data masih menunggu backup restore test dan persetujuan owner.
 
 ## File yang berubah
 
@@ -72,4 +81,42 @@ Migration belum dan tidak boleh diterapkan pada MySQL aktif. Tidak ada seeder at
 - External, target baru, mailto/tel, download, anchor halaman yang sama, modifier/middle click, dan navigasi yang dibatalkan tidak memicu atau mempertahankan loader. Form AJAX ditandai `data-ajax`, `data-remote`, atau `wire:submit` dilewati. Submit event normal baru terjadi setelah validasi browser; method/action/enctype/input tidak diubah.
 - CSS View Transitions yang lama tetap berfungsi sebagai page transition terpisah. `prefers-reduced-motion` meniadakan gerak tetapi status `aria-live="polite"` tetap tersedia. Overlay tersembunyi tanpa class pending; inline fail-safe juga menghapus pending jika JS utama gagal.
 - Node test tanpa dependency baru: 4 test lulus untuk navigasi link, pengecualian link, form normal/AJAX/external/cancelled, hide setelah siap, aria status, dan reduced motion. Node syntax check lulus. PHPUnit full suite SQLite in-memory: 64 test/814 assertion lulus. Build Vite lulus.
-- Browser automation tidak tersedia pada dependency proyek; visual browser test tidak diklaim. Uji manual: homepage → artikel → homepage; homepage → login → dashboard; dashboard → daftar tiket → detail tiket; katalog customer → cart → checkout; lakukan Back/Forward; uji form invalid, link external, anchor, Ctrl/Cmd-click, dan reduced-motion OS. Pastikan overlay tampak pada navigasi halaman normal dan menghilang setelah halaman siap.
+- Visual browser test tidak diklaim karena route non-root tertahan oleh konfigurasi Apache. Uji manual: homepage → artikel → homepage; homepage → login → dashboard; dashboard → daftar tiket → detail tiket; katalog customer → cart → checkout; lakukan Back/Forward; uji form invalid, link external, anchor, Ctrl/Cmd-click, dan reduced-motion OS. Pastikan overlay tampak pada navigasi halaman normal dan menghilang setelah halaman siap.
+# Release readiness correction — 2026-11-07
+
+- Sales report kini memiliki filter periode dan status order yang sama pada halaman, CSV, dan print view. CSV memuat paid/refund per order; print khusus mencetak seluruh hasil filter.
+- SQLite DLL tersedia pada PHP 8.3.36 dan dimuat hanya dengan parameter proses `-d`; PHPUnit menggunakan SQLite `:memory:`. Tidak ada perubahan `php.ini`.
+- PHPUnit full suite sebelumnya: **70 tests, 887 assertions lulus**. Error driver pada percobaan sebelumnya telah diselesaikan dengan pemuatan sementara tersebut.
+- Foto kategori dicari pada produk dengan kategori sama dan file public valid, baik produk aktif maupun nonaktif. Fallback CSS tetap tersedia.
+- Pada saat catatan sebelumnya dibuat, folder cover belum tersedia; status baru dan integrasinya ada pada bagian berikut.
+- Promo masih konsep draft tanpa angka finansial; social URL menunggu URL resmi. Product launch masih dry-run dan tidak diterapkan ke database aplikasi.
+- Browser visual test publik telah dilakukan setelah `mod_rewrite` aktif; route non-root dapat dibuka. Langkah dan batas pemeriksaan dicatat di `FINALIZATION_REPORT.md`.
+- Tidak ada akses MySQL, perubahan `.env`/`php.ini`/QRIS/transaksi, push, atau perubahan histori Git.
+
+# Integrasi cover artikel & visual acceptance — 2026-11-07
+
+- Empat JPEG sumber valid 1200×675 telah dicocokkan dengan judul dan isi artikel. Salinan ada pada `storage/app/public/articles/`; source import tetap ada.
+- `articles:publish-covers` memakai Laravel public Storage, validasi JPEG, dan no-overwrite. Command hanya mengelola file; tidak query atau mengubah database.
+- Mapping slug/asset/alt disimpan di `config/rotikita-article-covers.php`. Seeder idempotent mengisi `cover_path` kosong; `display_cover_path` mendukung record artikel lama tanpa write database.
+- Homepage, indeks, dan detail menampilkan alt yang relevan dan fallback brand bila file tidak tersedia/gagal. SQLite tests menguji copy/mapping, no-overwrite, pemeliharaan cover admin, dan render respons.
+- Regression full suite setelah integrasi: **74 tests, 940 assertions lulus tanpa risky test**. Pint/PHP lint/Node tests/Vite build juga lulus; build mencatat optional `fontaine` warning.
+- Browser visual acceptance publik terbatas telah dilakukan: homepage, katalog, daftar artikel, login, dan register pada desktop/mobile. Dashboard dan fitur internal tetap menunggu sesi autentikasi. URL cover statis telah diverifikasi HTTP 200.
+- Diagnosis route sebelumnya terselesaikan di luar workspace: vhost `ecrm-roti-kita.test` tetap menuju folder `public` dan `rewrite_module` kini aktif.
+- Tidak ada koneksi MySQL, update database aplikasi, perubahan `.env`, data transaksi, QRIS, maupun histori Git.
+
+### Verifikasi aktual setelah handoff — 7 November 2026
+
+- Full PHPUnit: **74 tests, 940 assertions, lulus**. Konfigurasi tetap SQLite `:memory:` dari `phpunit.xml`; tidak ada seeder atau migration yang dijalankan terhadap database aplikasi.
+- Empat source cover dan empat salinan public tervalidasi sebagai JPEG 1200×675. `public/storage` terverifikasi sebagai junction ke `storage/app/public`; URL cover statis merespons sebagai gambar.
+- PHP lint untuk file cover, Node syntax check, Vite build, dan `git diff --check` lulus. Vite hanya memberi warning informasional package opsional `fontaine`.
+- Baris publik yang tersedia telah diperiksa pada desktop/mobile dan dirinci di `VISUAL_ACCEPTANCE_CHECKLIST.md`; dashboard, fitur internal, dan artikel detail dengan data cover tetap belum diverifikasi.
+- Test isolated cover aktual: `ArticleCoverPublishingTest` + `ArticlePublishingTest` **9 tests, 177 assertions, lulus** pada SQLite in-memory. Test membuktikan publish/no-overwrite, slug mapping, fallback path, alt text, render URL cover pada daftar/detail, dan pelestarian cover admin.
+- Pemeriksaan browser menemukan overflow horizontal homepage mobile pada carousel produk; diperbaiki dengan `overflow-x: hidden` pada `.rks-page`. Katalog, artikel index, login, dan register mobile kemudian terukur tanpa body overflow.
+- QA closure: desktop 1440px dan mobile 390px diuji ulang. Carousel tetap merupakan scroll container horizontal (`overflow-x: auto`, `scroll-snap`) dan card pertama tidak terpotong; clipping hanya mencegah track memperlebar halaman. Full regression tetap **74 tests / 940 assertions**, PHP lint **119 files**, JS **4 tests**, Vite, Pint, Node syntax, dan diff check lulus.
+## Critical runtime audit — 2026-11-07
+
+- `/artikel` responds HTTP 200 on both local frontends.
+- No Laravel maintenance marker exists; the reported article 503 is not reproducible.
+- `/admin/tickets` remains dependent on the unapplied `2026_11_03_120000_create_support_ticket_tables.php`
+  migration. A safe, owner-approved execution plan is documented separately.
+- No active MySQL mutation was performed.

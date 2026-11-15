@@ -1,9 +1,22 @@
 document.addEventListener('DOMContentLoaded', function () {
+    function hideImageFallback(image) {
+        image.hidden = false;
+        const fallback = image.parentElement?.querySelector('[data-store-image-fallback]');
+        if (fallback) fallback.hidden = true;
+    }
+
     function showImageFallback(image) {
         image.hidden = true;
         const fallback = image.parentElement?.querySelector('[data-store-image-fallback]');
         if (fallback) fallback.hidden = false;
     }
+
+    document.addEventListener('load', function (event) {
+        const image = event.target;
+        if (image instanceof HTMLImageElement && image.matches('[data-store-image]')) {
+            hideImageFallback(image);
+        }
+    }, true);
 
     document.addEventListener('error', function (event) {
         const image = event.target;
@@ -13,7 +26,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }, true);
 
     document.querySelectorAll('img[data-store-image]').forEach(function (image) {
-        if (image.complete && image.naturalWidth === 0) showImageFallback(image);
+        if (!image.complete) return;
+        if (image.naturalWidth === 0) showImageFallback(image);
+        else hideImageFallback(image);
     });
 
     document.querySelectorAll('[data-product-carousel]').forEach(function (carousel) {

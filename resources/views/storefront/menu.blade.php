@@ -27,11 +27,11 @@
                     @include('storefront.partials.product-card', ['product' => $product])
                 @empty
                     @if($category !== '')
-                        <div class="rks-empty-products"><span aria-hidden="true">🔎</span><h3>Belum ada produk aktif di kategori {{ $category }}</h3><p>Produk dari kategori ini akan tampil saat tersedia dan aktif.</p><a href="{{ route('storefront.menu') }}" class="rks-text-link">Lihat semua kategori <span aria-hidden="true">→</span></a></div>
+                        <div class="rks-empty-products"><span class="rks-empty-mark" aria-hidden="true"></span><h3>Belum ada produk aktif di kategori {{ $category }}</h3><p>Produk dari kategori ini akan tampil saat tersedia dan aktif.</p><a href="{{ route('storefront.menu') }}" class="rks-text-link">Lihat semua kategori <span aria-hidden="true">→</span></a></div>
                     @elseif($search !== '')
-                        <div class="rks-empty-products"><span aria-hidden="true">🔎</span><h3>Belum ada produk yang cocok</h3><p>Coba kata pencarian atau kategori lain, ya.</p><a href="{{ route('storefront.menu') }}" class="rks-text-link">Reset pencarian <span aria-hidden="true">→</span></a></div>
+                        <div class="rks-empty-products"><span class="rks-empty-mark" aria-hidden="true"></span><h3>Belum ada produk yang cocok</h3><p>Coba kata pencarian atau kategori lain, ya.</p><a href="{{ route('storefront.menu') }}" class="rks-text-link">Reset pencarian <span aria-hidden="true">→</span></a></div>
                     @else
-                        <div class="rks-empty-products"><span aria-hidden="true">🥐</span><h3>Belum ada produk aktif</h3><p>Produk RotiKita Bakery akan tampil di sini saat tersedia dan aktif.</p><a href="{{ route('storefront.menu') }}" class="rks-text-link">Lihat kategori <span aria-hidden="true">→</span></a></div>
+                        <div class="rks-empty-products"><span class="rks-empty-mark" aria-hidden="true"></span><h3>Belum ada produk aktif</h3><p>Produk RotiKita Bakery akan tampil di sini saat tersedia dan aktif.</p><a href="{{ route('storefront.menu') }}" class="rks-text-link">Lihat kategori <span aria-hidden="true">→</span></a></div>
                     @endif
                 @endforelse
             </div>
@@ -47,7 +47,7 @@
                     @endforeach
                 </div>
             @elseif (request('section') === 'combo')
-                <div class="rks-empty-products"><span aria-hidden="true">🎁</span><h3>Belum ada paket combo aktif</h3><p>Paket akan ditampilkan setelah admin mengatur combo yang tersedia.</p></div>
+                <div class="rks-empty-products"><span class="rks-empty-mark" aria-hidden="true"></span><h3>Belum ada paket combo aktif</h3><p>Paket akan ditampilkan setelah admin mengatur combo yang tersedia.</p></div>
             @endif
         @endif
     </section>

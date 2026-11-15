@@ -14,7 +14,9 @@ class AdminPromotionPageTest extends TestCase
     public function test_promotions_page_renders_empty_and_filtered_results(): void
     {
         $admin = User::factory()->create(['role' => 'admin', 'is_active' => true]);
-        $this->actingAs($admin)->get(route('admin.promotions'))->assertOk()->assertSee('Belum ada promosi');
+        $this->actingAs($admin)->get(route('admin.promotions'))->assertOk()->assertSee('Belum ada promosi')
+            ->assertSee('Teman Ngopi RotiKita')->assertSee('Paket Berbagi')->assertSee('Favorit RotiKita')
+            ->assertSee('belum memiliki nilai finansial');
 
         $promotion = Promotion::create([
             'code' => 'ROTIKITA10', 'name' => 'Diskon Roti', 'discount_type' => 'percentage',

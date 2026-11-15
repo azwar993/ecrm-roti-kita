@@ -72,6 +72,7 @@ html.rks-navigation-pending .rks-page-loader {
 }
 
 .rks-page-loader-mark {
+    position: relative;
     display: grid;
     width: 76px;
     height: 76px;
@@ -81,9 +82,14 @@ html.rks-navigation-pending .rks-page-loader {
     background: #fffaf2;
     box-shadow: 0 12px 34px #38251e14;
     color: #b65d3c;
-    font: 700 48px/1 Georgia, serif;
-    animation: rks-loader-breathe 1.6s ease-in-out infinite;
+    animation: none;
 }
+.rks-page-loader-mark svg { position: relative; z-index: 1; width: 64px; overflow: visible; animation: rks-loaf-hop 1.15s ease-in-out infinite; }
+.rks-page-loader-mark::after { position: absolute; z-index: 0; bottom: 7px; width: 38px; height: 7px; border-radius: 50%; background: #6e452c30; content: ""; animation: rks-loaf-shadow 1.15s ease-in-out infinite; }
+.rks-loaf { fill: #d99a55; stroke: #a96132; stroke-width: 3; stroke-linejoin: round; }
+.rks-loaf-seam { fill: none; stroke: #efc27f; stroke-width: 3; stroke-linecap: round; }
+.rks-loaf-face { fill: #38251e; }
+.rks-loaf-smile, .rks-loaf-limb { fill: none; stroke: #38251e; stroke-width: 2.7; stroke-linecap: round; }
 
 .rks-page-loader-card strong { font: 600 22px/1.3 "Instrument Sans", sans-serif; }
 .rks-page-loader-status { color: #766359; font: 15px/1.5 "Instrument Sans", sans-serif; }
@@ -94,12 +100,32 @@ html.rks-navigation-pending .rks-page-loader {
 .rks-page-loader-dots i:nth-child(3) { animation-delay: .28s; }
 
 @keyframes rks-loader-progress { 0% { transform: translateX(-45%) scaleX(.28); } 50% { transform: translateX(120%) scaleX(.48); } 100% { transform: translateX(320%) scaleX(.28); } }
-@keyframes rks-loader-breathe { 50% { transform: translateY(-4px) rotate(-2deg); } }
+@keyframes rks-loaf-hop { 0%, 100% { transform: translateY(3px) scale(1.03,.96); } 42% { transform: translateY(-9px) scale(.96,1.04); } 65% { transform: translateY(-10px) scale(1,1); } }
+@keyframes rks-loaf-shadow { 0%, 100% { opacity: .75; transform: scaleX(1); } 50% { opacity: .28; transform: scaleX(.65); } }
 @keyframes rks-loader-dot { 50% { opacity: .35; transform: translateY(-3px); } }
 
 @media (prefers-reduced-motion: reduce) {
-    .rks-page-loader, .rks-page-loader::before, .rks-page-loader-mark, .rks-page-loader-dots i { animation: none; transition: none; }
+    .rks-page-loader, .rks-page-loader::before, .rks-page-loader-mark svg, .rks-page-loader-mark::after, .rks-page-loader-dots i { animation: none; transition: none; }
     .rks-page-loader::before { transform: none; }
+}
+
+@media print {
+    .rks-page-loader, .rk-sidebar, .rk-topbar, .rk-commerce-form-grid, .rk-real-pagination, button { display: none !important; }
+    body { background: #fff !important; color: #241a16 !important; }
+    .rk-panel { break-inside: avoid; box-shadow: none !important; }
+}
+.revenue-print-heading { margin: 12px 0 22px; }
+.revenue-print-heading h1 { margin: 6px 0; }
+.revenue-print-action { margin-bottom: 16px; }
+.revenue-print-report table { width: 100%; border-collapse: collapse; }
+.revenue-print-report th, .revenue-print-report td { padding: 8px; border-bottom: 1px solid #ded5cc; text-align: left; }
+@media print {
+    @page { margin: 15mm; @bottom-right { content: "Halaman " counter(page); font-size: 9pt; color: #766359; } }
+    .revenue-print-heading { display: block; margin-bottom: 18px; }
+    .revenue-print-heading h1 { margin: 6px 0; }
+    .revenue-print-report .rk-panel { padding: 0; }
+    .revenue-print-report .rk-table-wrap { overflow: visible; }
+    .revenue-print-report tr { break-inside: avoid; }
 }
 
 .rks-article-breadcrumb { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 24px; color: #766359; font-size: .9rem; }

@@ -25,8 +25,8 @@
         @forelse($products as $product)
             <article class="rk-commerce-card">
                 <div class="rk-commerce-card-image">
-                    @if($product->image_path)<img data-store-image src="{{ asset('storage/'.ltrim($product->image_path, '/')) }}" alt="Foto {{ $product->name }}" loading="lazy"><div data-store-image-fallback class="rk-commerce-no-image" hidden>Foto produk belum tersedia</div>
-                    @else<div class="rk-commerce-no-image">Foto produk belum tersedia</div>@endif
+                    @if($product->displayImagePath())<img data-store-image src="{{ asset('storage/'.$product->displayImagePath()) }}" alt="Foto {{ $product->name }}" loading="lazy"><div data-store-image-fallback class="rk-commerce-no-image" hidden>Foto {{ $product->category ?: 'produk' }} belum tersedia</div>
+                    @else<div data-store-image-fallback class="rk-commerce-no-image">Foto {{ $product->category ?: 'produk' }} belum tersedia</div>@endif
                 </div>
                 <div class="rk-commerce-card-body">
                     <div class="rk-commerce-meta">{{ $product->category }} · {{ $product->sku }}</div>

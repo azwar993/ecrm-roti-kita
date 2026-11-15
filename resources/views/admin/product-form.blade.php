@@ -34,12 +34,12 @@
             <aside class="rk-real-photo-panel">
                 <div class="rk-real-photo-heading"><strong>Foto produk aktual</strong><small>JPG, JPEG, PNG, atau WEBP · maks. 4 MB</small></div>
                 <div class="rk-real-photo-preview" id="product-photo-preview" data-product-photo-preview>
-                    <div class="rk-real-photo-empty" id="product-photo-placeholder" @if($product->image_path) hidden @endif><span>＋</span><strong>Belum ada foto</strong><small>Foto asli akan tampil di katalog.</small></div>
-                    <img src="{{ $product->image_path ? asset('storage/'.ltrim($product->image_path, '/')) : '' }}" alt="{{ $product->image_path ? 'Foto '.$product->name : 'Preview foto produk' }}" id="product-photo-preview-image" data-product-preview-image @if(!$product->image_path) hidden @endif>
+                    <div class="rk-real-photo-empty" id="product-photo-placeholder" @if($product->displayImagePath()) hidden @endif><span>＋</span><strong>Belum ada foto</strong><small>Foto asli akan tampil di katalog.</small></div>
+                    <img src="{{ $product->displayImagePath() ? asset('storage/'.$product->displayImagePath()) : '' }}" alt="{{ $product->displayImagePath() ? 'Foto '.$product->name : 'Preview foto produk' }}" id="product-photo-preview-image" data-product-preview-image @if(!$product->displayImagePath()) hidden @endif>
                 </div>
                 <label class="rk-field"><span>{{ $editing ? 'Unggah foto baru (opsional)' : 'Pilih foto produk' }}</span><input id="product-image-input" type="file" name="image" accept="image/jpeg,image/png,image/webp" data-product-image-input></label>
                 <p class="rk-real-help" id="product-image-message" role="status" aria-live="polite">Pilih file foto dari komputer. Foto disimpan di storage lokal aplikasi.</p>
-                @if($editing && $product->image_path)
+                @if($editing && $product->displayImagePath())
                     <label class="rk-real-remove-photo"><input type="checkbox" name="remove_image" value="1" data-remove-product-image disabled @checked(old('remove_image'))> Hapus foto saat ini</label>
                     <small class="rk-real-help">Pilih foto baru untuk mengganti. Penghapusan foto akan diminta konfirmasi.</small>
                 @endif

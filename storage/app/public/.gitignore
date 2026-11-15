@@ -1,2 +1,8 @@
 *
 !.gitignore
+!articles/
+articles/*
+!articles/cara-menyimpan-roti-agar-tetap-lembut.jpg
+!articles/mengenal-perbedaan-roti-manis-roti-tawar-dan-pastry.jpg
+!articles/tips-menghangatkan-roti-di-rumah.jpg
+!articles/inspirasi-memilih-camilan-bakery-untuk-berbagai-momen.jpg

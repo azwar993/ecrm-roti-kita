@@ -42,6 +42,10 @@ class Payment extends Model
             'verified_at' => 'datetime',
             'payment_details' => 'array',
             'refunded_at' => 'datetime',
+            'period_paid_at' => 'datetime',
+            'period_refund_at' => 'datetime',
+            'period_paid_amount' => 'decimal:2',
+            'period_refund_amount' => 'decimal:2',
         ];
     }
 

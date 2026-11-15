@@ -28,3 +28,11 @@ File `PPT SIM 9_CRM.pptx` tidak ditemukan pada inventaris workspace yang diperik
 - Temuan: segmentasi, retention cohort, conversion attribution promo, dan SLA support masih gap.
 
 Status implementasi harus ditinjau kembali setelah migration tiket disetujui dan diterapkan oleh pemilik proyek.
+# Catatan final polish
+
+- Laporan penjualan dapat diunduh dalam CSV dan dicetak/disimpan sebagai PDF melalui browser. PDF otomatis tidak tersedia karena dependency generator PDF tidak terpasang.
+- Persiapan stok 30 adalah data demo dan belum diterapkan pada database aplikasi.
+- Dua harga import berstatus usulan harus mendapat keputusan pemilik sebelum aktivasi.
+- Instagram/TikTok belum terverifikasi dan tidak ditautkan ke publik.
+- Tiga konsep promosi adalah draft copywriting; seluruh parameter finansial menunggu keputusan pemilik.
+- Kelompok: Haikal, Rizal, Selva. Copy utama: “Roti Hangat Setiap Hari”.

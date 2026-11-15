@@ -4,6 +4,9 @@
 @section('content')
 <div class="rk-page-heading rk-page-heading-v2"><div><p class="rk-eyebrow">Cerita dari dapur</p><h1>Artikel RotiKita</h1><p>Kelola tulisan yang akan muncul di storefront.</p></div><a class="rk-btn" href="{{ route('admin.articles.create') }}">Tulis artikel</a></div>
 <section class="rk-panel rk-panel-v2">
+    @unless ($schemaReady)
+        <div class="rk-alert rk-alert-error" role="alert">Modul artikel belum dapat membaca database karena migration tabel <code>articles</code> belum tersedia. Minta owner memverifikasi backup sebelum menjalankan migration.</div>
+    @endunless
     <form method="GET" class="rk-real-form-grid">
         <label class="rk-field"><span>Cari artikel</span><input name="q" value="{{ $search }}" placeholder="Judul atau slug"></label>
         <label class="rk-field"><span>Status</span><select name="status"><option value="all" @selected($status === 'all')>Semua</option><option value="draft" @selected($status === 'draft')>Draft</option><option value="published" @selected($status === 'published')>Published</option></select></label>

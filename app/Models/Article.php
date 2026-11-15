@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class Article extends Model
 {
@@ -40,5 +41,22 @@ class Article extends Model
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    public function getCoverAltAttribute(): string
+    {
+        return config("rotikita-article-covers.{$this->slug}.alt", "Sampul artikel: {$this->title}");
+    }
+
+    public function getDisplayCoverPathAttribute(): ?string
+    {
+        $storedPath = $this->attributes['cover_path'] ?? null;
+        $coverPath = filled($storedPath)
+            ? $storedPath
+            : config("rotikita-article-covers.{$this->slug}.path");
+
+        return filled($coverPath) && Storage::disk('public')->exists($coverPath)
+            ? $coverPath
+            : null;
     }
 }

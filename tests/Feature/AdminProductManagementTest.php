@@ -167,6 +167,21 @@ class AdminProductManagementTest extends TestCase
         Storage::disk('public')->assertExists('products/approved-team-photo.jpg');
     }
 
+    public function test_home_category_uses_valid_matching_photo_from_inactive_product(): void
+    {
+        Storage::fake('public');
+        Storage::disk('public')->put('products/pastry-review.jpg', 'local fixture image');
+        $this->makeProduct([
+            'sku' => 'CATEGORY-PASTRY-REVIEW', 'category' => 'Pastry',
+            'image_path' => 'products/pastry-review.jpg', 'is_active' => false,
+        ]);
+
+        $this->get(route('home'))->assertOk()
+            ->assertSee('alt="Produk Pastry"', false)
+            ->assertSee('/storage/products/pastry-review.jpg', false)
+            ->assertSee('href="'.route('storefront.menu', ['category' => 'Pastry']).'"', false);
+    }
+
     private function makeUser(string $role): User
     {
         return User::factory()->create([

@@ -7,8 +7,8 @@
     <nav class="rks-article-breadcrumb" aria-label="Breadcrumb"><a class="rks-text-link" href="{{ route('home') }}">Beranda</a><span aria-hidden="true">/</span><a class="rks-text-link" href="{{ route('articles.index') }}">Artikel</a><span aria-hidden="true">/</span><span>{{ $article->category }}</span></nav>
     <article>
         <header class="rks-content-hero"><p class="rks-eyebrow">{{ $article->category }}</p><h1>{{ $article->title }}</h1><time datetime="{{ $article->published_at->toDateString() }}">{{ $article->published_at->translatedFormat('d F Y') }}</time>@if($article->excerpt)<p>{{ $article->excerpt }}</p>@endif</header>
-        @if($article->cover_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($article->cover_path))
-            <img class="rks-article-detail-cover" src="{{ asset('storage/'.$article->cover_path) }}" alt="Cover {{ $article->title }}">
+        @if($article->display_cover_path)
+            <div class="rks-article-detail-cover-wrap"><img data-store-image class="rks-article-detail-cover" src="{{ asset('storage/'.$article->display_cover_path) }}" alt="{{ $article->cover_alt }}"><div data-store-image-fallback class="rks-article-brand-cover" aria-label="Ilustrasi identitas RotiKita" hidden><span>R</span><strong>RotiKita Bakery</strong><small>Roti Hangat Setiap Hari</small></div></div>
         @else
             <div class="rks-article-brand-cover" aria-label="Ilustrasi identitas RotiKita"><span>R</span><strong>RotiKita Bakery</strong><small>Roti Hangat Setiap Hari</small></div>
         @endif

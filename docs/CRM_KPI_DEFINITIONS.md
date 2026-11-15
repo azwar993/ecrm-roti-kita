@@ -15,3 +15,6 @@ Semua KPI pada dashboard menggunakan periode bulan kalender berjalan berdasarkan
 Buyer dihitung menggunakan order customer yang memiliki payment paid dalam rentang `startOfMonth()` sampai `endOfMonth()`. Dashboard menampilkan 0% saat tidak ada buyer. Pendapatan tetap menggunakan RevenueService existing.
 
 Belum dihitung: waktu respons pertama dan rata-rata penyelesaian tiket karena belum ada status history atau aturan penanda respons admin yang dapat dipercaya.
+# Sales report export
+
+Export dan tampilan laporan menggunakan `RevenueService`. Pembayaran berstatus paid dihitung menurut waktu pembayaran; ledger refund dikurangi satu kali oleh layanan yang sama, dengan fallback transaksi legacy tanpa ledger. Ringkasan CSV memuat jumlah pembayaran paid, jumlah pembayaran, refund sah (pembayaran paid dikurangi net revenue), dan pendapatan bersih. Nilai tersebut adalah metrik laporan, bukan gross order sales.

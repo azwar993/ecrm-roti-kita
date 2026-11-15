@@ -18,5 +18,6 @@
         <p>Nikmati roti, cake, pastry, dan pilihan bakery yang dibuat untuk menemani hari.</p>
         <div class="actions"><a class="button" href="{{ route('home') }}">Kunjungi beranda</a><a class="button secondary" href="{{ route('storefront.menu') }}">Jelajahi menu</a></div>
     </main>
+    @include('components.group-identity')
 </body>
 </html>

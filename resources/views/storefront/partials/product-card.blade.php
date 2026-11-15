@@ -1,9 +1,9 @@
 <article class="rks-product-card">
     <a class="rks-product-image" href="{{ route('storefront.product', $product) }}" aria-label="Lihat detail {{ $product->name }}">
-        @if ($product->image_path)
-            <img data-store-image src="{{ asset('storage/' . ltrim($product->image_path, '/')) }}" alt="Foto {{ $product->name }}" loading="lazy">
+        @if ($product->displayImagePath())
+            <img data-store-image src="{{ asset('storage/' . $product->displayImagePath()) }}" alt="Foto {{ $product->name }}" loading="lazy">
         @endif
-        <span data-store-image-fallback class="rks-product-fallback" aria-hidden="true" @if($product->image_path) hidden @endif>🥐</span>
+        <span data-store-image-fallback class="rks-product-fallback" @if($product->displayImagePath()) hidden @endif>Foto {{ $product->category ?: 'produk' }} belum tersedia</span>
         @if ((int) $product->stock_qty <= 0)
             <span class="rks-product-ribbon is-soldout">Habis</span>
         @elseif ((int) $product->stock_qty <= 5)

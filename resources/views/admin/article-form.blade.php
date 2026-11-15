@@ -4,6 +4,9 @@
 @section('content')
 <div class="rk-page-heading rk-page-heading-v2"><div><p class="rk-eyebrow">Cerita dari dapur</p><h1>{{ $article->exists ? 'Edit artikel' : 'Tulis artikel' }}</h1></div><a class="rk-btn rk-btn-quiet" href="{{ route('admin.articles.index') }}">Kembali</a></div>
 <section class="rk-panel rk-panel-v2 rk-article-editor">
+    @unless ($schemaReady)
+        <div class="rk-alert rk-alert-error" role="alert">Form dapat ditinjau, tetapi penyimpanan dinonaktifkan sampai migration tabel <code>articles</code> tersedia.</div>
+    @endunless
     @if ($errors->any())<div class="rk-commerce-errors" role="alert"><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
     <form method="POST" enctype="multipart/form-data" action="{{ $article->exists ? route('admin.articles.update', $article) : route('admin.articles.store') }}">
         @csrf
@@ -21,7 +24,7 @@
             <label class="rk-field"><span>Tanggal publikasi</span><input type="datetime-local" name="published_at" value="{{ old('published_at', $article->published_at?->format('Y-m-d\TH:i')) }}"><small>Jika published dan kosong, waktu saat simpan digunakan.</small></label>
             @if($article->cover_path)<div class="rk-field"><span>Cover tersimpan</span><img class="rk-article-admin-cover" src="{{ asset('storage/'.$article->cover_path) }}" alt="Cover artikel saat ini"></div>@endif
         </div>
-        <div class="rk-real-form-footer"><a class="rk-btn rk-btn-quiet" href="{{ route('admin.articles.index') }}">Batal</a><button class="rk-btn" type="submit">Simpan artikel</button></div>
+        <div class="rk-real-form-footer"><a class="rk-btn rk-btn-quiet" href="{{ route('admin.articles.index') }}">Batal</a><button class="rk-btn" type="submit" @disabled(! $schemaReady)>Simpan artikel</button></div>
     </form>
 </section>
 @endsection

@@ -167,7 +167,7 @@ class ProductController extends Controller
             throw ValidationException::withMessages(['price' => 'Konfirmasi harga usulan sebelum mengaktifkan produk.']);
         }
 
-        if (! $product->is_active && (! $product->image_path || ! Storage::disk('public')->exists($product->image_path))) {
+        if (! $product->is_active && blank($product->displayImagePath())) {
             throw ValidationException::withMessages(['image' => 'Tambahkan foto produk yang valid sebelum mengaktifkan produk.']);
         }
 
@@ -217,9 +217,8 @@ class ProductController extends Controller
 
         if ($request->boolean('is_active')) {
             $hasUploadedImage = $request->hasFile('image');
-            $keepsExistingImage = $product?->image_path
-                && ! $request->boolean('remove_image')
-                && Storage::disk('public')->exists($product->image_path);
+            $keepsExistingImage = $product?->displayImagePath() !== null
+                && ! $request->boolean('remove_image');
 
             if (! $hasUploadedImage && ! $keepsExistingImage) {
                 throw ValidationException::withMessages(['image' => 'Unggah foto produk sebelum mengaktifkannya. Produk tanpa foto dapat disimpan sebagai nonaktif.']);

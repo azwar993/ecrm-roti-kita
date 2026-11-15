@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\PaymentSettingController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\PromotionController;
 use App\Http\Controllers\Admin\RevenueReportController;
+use App\Http\Controllers\Admin\SupportTicketController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Customer\CartController;
@@ -88,6 +89,8 @@ Route::delete('/customer/cart/items/{type}/{id}', [CartController::class, 'destr
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
     Route::get('/reports/revenue', RevenueReportController::class)->name('reports.revenue');
+    Route::get('/reports/revenue/print', [RevenueReportController::class, 'print'])->name('reports.revenue.print');
+    Route::get('/reports/revenue/export', [RevenueReportController::class, 'export'])->name('reports.revenue.export');
     Route::get('/inbox', [InboxController::class, 'index'])->name('inbox');
     Route::get('/payment-settings', [PaymentSettingController::class, 'edit'])->name('payment-settings.edit');
     Route::put('/payment-settings', [PaymentSettingController::class, 'update'])->name('payment-settings.update');
@@ -97,10 +100,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::get('/customers', [AdminCustomerController::class, 'index'])->name('customers');
     Route::get('/customers/{customer}', [AdminCustomerController::class, 'show'])->whereNumber('customer')->name('customers.show');
     Route::resource('/articles', App\Http\Controllers\Admin\ArticleController::class)->except(['show'])->parameters(['articles' => 'article']);
-    Route::get('/tickets', [App\Http\Controllers\Admin\SupportTicketController::class, 'index'])->name('tickets.index');
-    Route::get('/tickets/{ticket}', [App\Http\Controllers\Admin\SupportTicketController::class, 'show'])->whereNumber('ticket')->name('tickets.show');
-    Route::post('/tickets/{ticket}/reply', [App\Http\Controllers\Admin\SupportTicketController::class, 'reply'])->middleware('throttle:10,1')->whereNumber('ticket')->name('tickets.reply');
-    Route::patch('/tickets/{ticket}', [App\Http\Controllers\Admin\SupportTicketController::class, 'update'])->whereNumber('ticket')->name('tickets.update');
+    Route::get('/tickets', [SupportTicketController::class, 'index'])->name('tickets.index');
+    Route::get('/tickets/{ticket}', [SupportTicketController::class, 'show'])->whereNumber('ticket')->name('tickets.show');
+    Route::post('/tickets/{ticket}/reply', [SupportTicketController::class, 'reply'])->middleware('throttle:10,1')->whereNumber('ticket')->name('tickets.reply');
+    Route::patch('/tickets/{ticket}', [SupportTicketController::class, 'update'])->whereNumber('ticket')->name('tickets.update');
     Route::get('/ticket-attachments/{attachment}', [App\Http\Controllers\Customer\SupportTicketController::class, 'download'])->whereNumber('attachment')->name('tickets.attachments.download');
 
     Route::get('/products', [ProductController::class, 'index'])->name('products');

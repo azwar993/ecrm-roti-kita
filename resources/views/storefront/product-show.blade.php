@@ -5,14 +5,18 @@
 @section('content')
 <main class="rks-main rks-product-detail-main">
     <section class="rks-section rks-product-detail" aria-labelledby="product-title">
-        <a class="rks-text-link" href="{{ route('storefront.menu') }}">← Kembali ke menu</a>
+        <nav class="rks-product-breadcrumb" aria-label="Breadcrumb">
+            <a href="{{ route('home') }}">Beranda</a><span aria-hidden="true">/</span>
+            <a href="{{ route('storefront.menu') }}">Menu</a><span aria-hidden="true">/</span>
+            <span>{{ $product->name }}</span>
+        </nav>
         <article class="rks-product-detail-card">
             <div class="rks-product-detail-photo">
-                @if($product->image_path)
-                    <img data-store-image src="{{ asset('storage/'.ltrim($product->image_path, '/')) }}" alt="Foto {{ $product->name }}">
-                    <span data-store-image-fallback class="rks-product-fallback" aria-hidden="true" hidden>🥐</span>
+                @if($product->displayImagePath())
+                    <img data-store-image src="{{ asset('storage/'.$product->displayImagePath()) }}" alt="Foto {{ $product->name }}">
+                    <span data-store-image-fallback class="rks-product-fallback" hidden>Foto {{ $product->category ?: 'produk' }} belum tersedia</span>
                 @else
-                    <span class="rks-product-fallback" aria-hidden="true">🥐</span>
+                    <span class="rks-product-fallback">Foto {{ $product->category ?: 'produk' }} belum tersedia</span>
                     <span class="rks-detail-photo-note">Foto produk belum tersedia</span>
                 @endif
             </div>

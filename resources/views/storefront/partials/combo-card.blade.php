@@ -3,25 +3,34 @@
     $comboComponentsAvailable = $comboHasComponents && $combo->items->every(function ($component) {
         return $component->product && $component->product->is_active && (int) $component->product->stock_qty >= (int) $component->quantity;
     });
+    $comboNormalPrice = $combo->items->sum(fn ($component) => (float) ($component->product?->price ?? 0) * (int) $component->quantity);
+    $comboDescription = trim(preg_replace('/(?:Harga normal\s*:?\s*Rp[\d.,]+\s*|Hemat\s*:?\s*Rp[\d.,]+\s*\.?\s*)/i', '', (string) $combo->description));
 @endphp
 <article class="rks-product-card rks-combo-card">
     <div class="rks-product-image">
         @if ($combo->image_path)
             <img data-store-image src="{{ asset('storage/' . ltrim($combo->image_path, '/')) }}" alt="Foto {{ $combo->name }}" loading="lazy">
         @endif
-        <span data-store-image-fallback class="rks-product-fallback" aria-hidden="true" @if($combo->image_path) hidden @endif>🎁</span>
+        <span data-store-image-fallback class="rks-product-fallback" @if($combo->image_path) hidden @endif>Foto combo belum tersedia</span>
         <span class="rks-product-ribbon rks-combo-ribbon">Paket hemat</span>
     </div>
     <div class="rks-product-body">
         <div class="rks-product-meta"><span>Combo RotiKita</span><span aria-hidden="true">·</span><span>{{ $combo->sku }}</span></div>
         <h3>{{ $combo->name }}</h3>
-        <p>{{ \Illuminate\Support\Str::limit($combo->description ?: 'Kombinasi favorit untuk dinikmati bersama.', 96) }}</p>
+        <p>{{ \Illuminate\Support\Str::limit($comboDescription !== '' ? $comboDescription : 'Kombinasi favorit untuk dinikmati bersama.', 96) }}</p>
         <div class="rks-combo-contents">
             @foreach ($combo->items as $component)
                 <span>{{ $component->product?->name ?? 'Produk' }} × {{ $component->quantity }}</span>
             @endforeach
         </div>
-        <div class="rks-product-bottom"><strong class="rks-price">Rp {{ number_format((float) $combo->price, 0, ',', '.') }}</strong><span class="rks-stock {{ $comboComponentsAvailable ? 'is-available' : 'is-unavailable' }}">{{ $comboComponentsAvailable ? 'Tersedia' : 'Komponen habis' }}</span></div>
+        <div class="rks-product-bottom">
+            <span class="rks-combo-price-stack">
+                @if($comboNormalPrice > (float) $combo->price)<small>Harga satuan Rp {{ number_format($comboNormalPrice, 0, ',', '.') }}</small>@endif
+                <strong class="rks-price">Rp {{ number_format((float) $combo->price, 0, ',', '.') }}</strong>
+                @if($comboNormalPrice > (float) $combo->price)<small class="rks-combo-saving">Hemat Rp {{ number_format($comboNormalPrice - (float) $combo->price, 0, ',', '.') }}</small>@endif
+            </span>
+            <span class="rks-stock {{ $comboComponentsAvailable ? 'is-available' : 'is-unavailable' }}">{{ $comboComponentsAvailable ? 'Tersedia' : 'Komponen habis' }}</span>
+        </div>
         <form class="rks-add-form" method="POST" action="{{ route('customer.cart.items.store') }}">
             @csrf
             <input type="hidden" name="type" value="combo">

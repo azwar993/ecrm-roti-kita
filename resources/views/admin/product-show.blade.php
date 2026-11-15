@@ -5,8 +5,8 @@
 <div class="rk-page-heading rk-page-heading-v2"><div><p class="rk-eyebrow">Data produk dari database</p><h1>{{ $product->name }}</h1><p>SKU <span class="rk-mono">{{ $product->sku }}</span></p></div><div class="rk-heading-actions"><a class="rk-btn rk-btn-quiet" href="{{ route('admin.products') }}">Kembali</a><a class="rk-btn" href="{{ route('admin.products.edit', $product) }}">Edit produk</a></div></div>
 <section class="rk-panel rk-panel-v2 rk-product-detail-admin">
     <div class="rk-product-admin-photo">
-        @if($product->image_path)
-            <img src="{{ asset('storage/'.ltrim($product->image_path, '/')) }}" alt="Foto {{ $product->name }}" onerror="this.hidden=true;this.nextElementSibling.hidden=false">
+        @if($product->displayImagePath())
+            <img src="{{ asset('storage/'.$product->displayImagePath()) }}" alt="Foto {{ $product->name }}" onerror="this.hidden=true;this.nextElementSibling.hidden=false">
             <div class="rk-real-thumb-empty" hidden>Foto tidak tersedia</div>
         @else
             <div class="rk-real-thumb-empty">Foto produk belum tersedia</div>

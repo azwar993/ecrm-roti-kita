@@ -7,6 +7,7 @@ use App\Models\Promotion;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class PromotionController extends Controller
@@ -21,20 +22,27 @@ class PromotionController extends Controller
             $query->where(fn ($builder) => $builder->where('name', 'like', "%{$search}%")
                 ->orWhere('code', 'like', "%{$search}%"));
         }
-        if ($status === 'active') $query->where('is_active', true);
-        if ($status === 'inactive') $query->where('is_active', false);
-        if ($status === 'expired') $query->where('ends_at', '<', now());
+        if ($status === 'active') {
+            $query->where('is_active', true);
+        }
+        if ($status === 'inactive') {
+            $query->where('is_active', false);
+        }
+        if ($status === 'expired') {
+            $query->where('ends_at', '<', now());
+        }
 
         return view('admin.promotions', [
             'promotions' => $query->paginate(12)->withQueryString(),
             'search' => $search,
             'status' => $status,
+            'campaignDrafts' => config('rotikita-campaigns.drafts'),
         ]);
     }
 
     public function create(): View
     {
-        return view('admin.promotion-form', ['promotion' => new Promotion()]);
+        return view('admin.promotion-form', ['promotion' => new Promotion]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -99,7 +107,7 @@ class PromotionController extends Controller
         ]);
 
         if ($data['discount_type'] === Promotion::TYPE_PERCENTAGE && (float) $data['discount_value'] > 100) {
-            throw \Illuminate\Validation\ValidationException::withMessages([
+            throw ValidationException::withMessages([
                 'discount_value' => 'Diskon persentase tidak boleh lebih dari 100%.',
             ]);
         }

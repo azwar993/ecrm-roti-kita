@@ -1,11 +1,13 @@
 @extends('layouts.guest')
 
 @section('title', 'Masuk')
+@section('body_class', 'rk-auth-login-page')
+@section('auth_variant', 'login')
 
 @section('content')
     <a class="rk-auth-back-link" href="{{ route('home') }}"><span aria-hidden="true">←</span> Kembali ke beranda</a>
     <p class="rk-eyebrow rk-eyebrow-space">Senang melihatmu lagi</p>
-    <h2>Masuk ke akunmu</h2>
+    <h2>Selamat datang kembali.</h2>
     <p class="rk-auth-subtitle">Lanjutkan pesanan dan temukan lagi roti favoritmu di RotiKita.</p>
 
     <form method="POST" action="{{ route('login.store') }}">

@@ -18,9 +18,9 @@ class ArticleSeeder extends Seeder
                 'category' => 'Tips Bakery',
                 'seo_title' => 'Cara Menyimpan Roti agar Tetap Lembut | RotiKita Bakery',
                 'seo_description' => 'Pelajari cara menyimpan roti agar teksturnya tetap lembut, tidak cepat kering, dan lebih nikmat saat disantap.',
-                'excerpt' => 'Roti yang disimpan dengan cara tepat dapat mempertahankan tekstur dan rasanya lebih baik. Kenali cara menyimpan roti sesuai jenis dan bahan isiannya.',
+                'excerpt' => 'Roti yang disimpan dengan cara yang tepat dapat mempertahankan tekstur dan rasanya dengan lebih baik. Kenali cara menyimpan roti sesuai jenis dan bahan isiannya.',
                 'body' => <<<'BODY'
-Roti merupakan salah satu pilihan makanan yang mudah dinikmati kapan saja. Namun, tekstur roti bisa berubah setelah beberapa waktu. Roti yang awalnya lembut dapat terasa kering, keras, atau kehilangan aroma ketika disimpan dengan cara yang kurang tepat.
+Roti merupakan salah satu pilihan makanan yang mudah dinikmati kapan saja. Namun, tekstur roti dapat berubah setelah beberapa waktu. Roti yang awalnya lembut dapat terasa kering, keras, atau kehilangan aroma ketika disimpan dengan cara yang kurang tepat.
 
 Agar roti tetap nikmat, cara penyimpanannya perlu disesuaikan dengan jenis roti, bahan isian, serta kapan roti akan dikonsumsi.
 
@@ -63,7 +63,7 @@ BODY,
                 'category' => 'Edukasi Bakery',
                 'seo_title' => 'Perbedaan Roti Manis, Roti Tawar, dan Pastry | RotiKita',
                 'seo_description' => 'Kenali karakteristik roti manis, roti tawar, dan pastry dari tekstur, rasa, bahan, serta cara menikmatinya.',
-                'excerpt' => 'Sama-sama menjadi pilihan bakery, roti manis, roti tawar, dan pastry memiliki karakteristik yang berbeda. Kenali perbedaannya agar lebih mudah memilih.',
+                'excerpt' => 'Meskipun sama-sama menjadi pilihan bakery, roti manis, roti tawar, dan pastry memiliki karakteristik yang berbeda. Kenali perbedaannya agar lebih mudah memilih.',
                 'body' => <<<'BODY'
 Dunia bakery memiliki banyak jenis produk dengan bentuk, rasa, dan tekstur yang beragam. Tiga jenis yang sering ditemui adalah roti manis, roti tawar, dan pastry.
 
@@ -87,13 +87,13 @@ Karena rasanya netral, roti tawar juga dapat diolah menjadi berbagai hidangan se
 
 ## 3. Pastry
 
-Pastry merupakan kelompok produk bakery yang memiliki karakteristik tekstur berbeda dari roti pada umumnya. Beberapa jenis pastry dikenal karena lapisan yang renyah dan berlapis.
+Pastry merupakan kelompok produk bakery yang memiliki karakteristik tekstur berbeda dari roti pada umumnya. Beberapa jenis pastry dikenal karena lapisannya yang renyah.
 
 Pada pastry berlapis, adonan dan lemak disusun melalui proses pelipatan sehingga membentuk lapisan-lapisan ketika dipanggang.
 
-Pastry dapat memiliki rasa manis maupun gurih. Contohnya dapat berupa croissant, danish, puff pastry, serta berbagai variasi lainnya.
+Pastry dapat memiliki rasa manis maupun gurih. Contohnya antara lain croissant, danish, puff pastry, serta berbagai variasi lainnya.
 
-Namun, tidak semua pastry mempunyai bentuk atau proses yang sama karena pastry merupakan kelompok produk dengan jenis yang beragam.
+Namun, tidak semua pastry memiliki bentuk atau proses yang sama karena pastry merupakan kelompok produk dengan jenis yang beragam.
 
 ## 4. Perbedaan tekstur dan cara menikmatinya
 
@@ -179,7 +179,7 @@ BODY,
                 'seo_description' => 'Temukan inspirasi memilih camilan bakery untuk sarapan, teman bekerja, berkumpul bersama keluarga, hingga acara sederhana.',
                 'excerpt' => 'Camilan bakery dapat menemani banyak aktivitas. Temukan inspirasi memilih roti dan pastry sesuai suasana, kebutuhan, dan momen kebersamaan.',
                 'body' => <<<'BODY'
-Camilan tidak selalu harus menjadi bagian dari acara besar. Dalam aktivitas sehari-hari, makanan ringan dapat menjadi teman untuk beristirahat, bekerja, belajar, atau menghabiskan waktu bersama orang terdekat.
+Camilan tidak selalu harus menjadi bagian dari acara besar. Dalam aktivitas sehari-hari, makanan ringan dapat menjadi teman untuk beristirahat, bekerja, belajar, atau menghabiskan waktu bersama orang-orang terdekat.
 
 Produk bakery memiliki banyak pilihan rasa dan bentuk sehingga mudah disesuaikan dengan berbagai momen.
 
@@ -232,5 +232,7 @@ BODY,
                 'published_at' => now()->subDay(),
             ]);
         }
+
+        $this->call(ArticleCoverSeeder::class);
     }
 }

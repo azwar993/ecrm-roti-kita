@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Promotion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class StorefrontController extends Controller
@@ -34,6 +35,17 @@ class StorefrontController extends Controller
             ->merge($storedCategories)
             ->unique()
             ->values();
+        $categoryImages = collect();
+        Product::query()
+            ->orderByDesc('id')
+            ->get()
+            ->each(function (Product $product) use ($categoryImages): void {
+                if (filled($product->category)
+                    && ! $categoryImages->has($product->category)
+                    && filled($product->displayImagePath())) {
+                    $categoryImages->put($product->category, $product->displayImagePath());
+                }
+            });
 
         $featuredCombos = $this->activeCombos()
             ->whereHas('items')
@@ -41,13 +53,15 @@ class StorefrontController extends Controller
             ->latest('id')
             ->limit(3)
             ->get();
+        $comboImagePath = $featuredCombos->first(fn (Combo $combo): bool => filled($combo->image_path)
+            && Storage::disk('public')->exists($combo->image_path))?->image_path;
 
         $articles = Schema::hasTable('articles')
             ? Article::query()->published()->latest('published_at')->latest('id')->limit(3)->get()
             : collect();
         $promotions = $this->activePromotions()->limit(3)->get();
 
-        return view('storefront.home', compact('featuredProducts', 'featuredCategories', 'featuredCombos', 'articles', 'promotions'));
+        return view('storefront.home', compact('featuredProducts', 'featuredCategories', 'categoryImages', 'comboImagePath', 'featuredCombos', 'articles', 'promotions'));
     }
 
     public function about(): View
@@ -57,7 +71,18 @@ class StorefrontController extends Controller
 
     public function promotions(): View
     {
-        return view('storefront.promotions', ['promotions' => $this->activePromotions()->paginate(9)]);
+        $promoVisual = Product::query()
+            ->where('is_active', true)
+            ->where('stock_qty', '>', 0)
+            ->latest('id')
+            ->limit(12)
+            ->get()
+            ->first(fn (Product $product): bool => filled($product->displayImagePath()));
+
+        return view('storefront.promotions', [
+            'promotions' => $this->activePromotions()->paginate(9),
+            'promoVisual' => $promoVisual,
+        ]);
     }
 
     public function menu(Request $request): View

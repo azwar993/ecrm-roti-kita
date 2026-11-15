@@ -1,6 +1,87 @@
 (() => {
     'use strict';
 
+    const appShell = document.querySelector('.rk-app');
+    const sidebar = document.getElementById('rk-sidebar');
+    const sidebarToggle = document.querySelector('[data-sidebar-toggle]');
+    const sidebarClose = document.querySelector('[data-sidebar-close]');
+    const desktopSidebar = window.matchMedia('(min-width: 801px)');
+    let wasDesktopSidebar = desktopSidebar.matches;
+
+    function setSidebarOpen(isOpen) {
+        if (!appShell || !sidebar || !sidebarToggle) return;
+
+        if (desktopSidebar.matches) {
+            appShell.classList.toggle('is-sidebar-collapsed', !isOpen);
+            sidebar.classList.remove('is-open');
+            sidebarClose?.classList.remove('is-visible');
+            sidebarToggle.setAttribute('aria-expanded', String(isOpen));
+            sidebarToggle.setAttribute('aria-label', isOpen ? 'Perkecil navigasi' : 'Perluas navigasi');
+            sidebar.querySelectorAll('.rk-nav-link').forEach((link) => {
+                if (isOpen) {
+                    link.removeAttribute('aria-label');
+                    link.removeAttribute('title');
+                } else {
+                    const label = link.querySelector('.rk-nav-label')?.textContent?.trim() || 'Navigasi';
+                    link.setAttribute('aria-label', label);
+                    link.setAttribute('title', label);
+                }
+            });
+            sidebar.querySelectorAll('[data-admin-nav-toggle]').forEach((toggle) => {
+                const label = toggle.querySelector('.rk-nav-label')?.textContent?.trim() || 'Grup navigasi';
+                if (isOpen) {
+                    toggle.removeAttribute('aria-label');
+                    toggle.removeAttribute('title');
+                } else {
+                    toggle.setAttribute('aria-label', label);
+                    toggle.setAttribute('title', label);
+                }
+            });
+            return;
+        }
+
+        sidebar.classList.toggle('is-open', isOpen);
+        sidebarClose?.classList.toggle('is-visible', isOpen);
+        sidebarToggle.setAttribute('aria-expanded', String(isOpen));
+        sidebarToggle.setAttribute('aria-label', isOpen ? 'Tutup navigasi' : 'Buka navigasi');
+    }
+
+    setSidebarOpen(desktopSidebar.matches);
+    sidebarToggle?.addEventListener('click', () => {
+        const isOpen = sidebarToggle.getAttribute('aria-expanded') === 'true';
+        setSidebarOpen(!isOpen);
+    });
+    sidebarClose?.addEventListener('click', () => setSidebarOpen(false));
+    sidebar?.querySelectorAll('.rk-nav-link').forEach((link) => {
+        link.addEventListener('click', () => {
+            if (!desktopSidebar.matches) setSidebarOpen(false);
+        });
+    });
+    sidebar?.querySelectorAll('[data-admin-nav-toggle]').forEach((toggle) => {
+        toggle.addEventListener('click', () => {
+            const group = toggle.closest('[data-admin-nav-group]');
+            const items = group?.querySelector('.rk-admin-nav-items');
+            const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+            if (!group || !items) return;
+
+            toggle.setAttribute('aria-expanded', String(!isExpanded));
+            items.hidden = isExpanded;
+            group.classList.toggle('is-expanded', !isExpanded);
+        });
+    });
+    window.addEventListener('resize', () => {
+        if (desktopSidebar.matches === wasDesktopSidebar) return;
+
+        wasDesktopSidebar = desktopSidebar.matches;
+        setSidebarOpen(desktopSidebar.matches && !appShell?.classList.contains('is-sidebar-collapsed'));
+    });
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && sidebar?.classList.contains('is-open')) {
+            setSidebarOpen(false);
+            sidebarToggle?.focus();
+        }
+    });
+
     const statusLabels = {
         pending: 'Menunggu',
         processing: 'Diproses',

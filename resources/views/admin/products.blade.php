@@ -40,8 +40,8 @@
             @forelse($products as $product)
                 <tr>
                     <td><div class="rk-real-product-cell">
-                        @if($product->image_path)
-                            <img class="rk-real-thumb" src="{{ asset('storage/'.$product->image_path) }}" alt="Foto {{ $product->name }}" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false">
+                        @if($product->displayImagePath())
+                            <img class="rk-real-thumb" src="{{ asset('storage/'.$product->displayImagePath()) }}" alt="Foto {{ $product->name }}" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false">
                             <div class="rk-real-thumb rk-real-thumb-empty" aria-label="Foto produk tidak tersedia" hidden>Foto</div>
                         @else
                             <div class="rk-real-thumb rk-real-thumb-empty" aria-label="Belum ada foto">Foto</div>

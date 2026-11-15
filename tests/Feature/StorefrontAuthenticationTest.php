@@ -36,7 +36,7 @@ class StorefrontAuthenticationTest extends TestCase
             ->assertDontSee('Laravel Logo')
             ->assertSee('Masuk')
             ->assertSee('Daftar akun')
-            ->assertSee('Belum ada produk tersedia')
+            ->assertSee('Menu unggulan sedang disiapkan')
             ->assertDontSee('data-account-trigger', false);
         $this->get(route('storefront.menu'))->assertOk()->assertViewIs('storefront.menu');
         $this->get('/route-not-found-for-brand-check')->assertNotFound()
@@ -326,9 +326,10 @@ class StorefrontAuthenticationTest extends TestCase
 
         $this->actingAs($user)->get(route('customer.dashboard'))->assertOk()
             ->assertSee('RK-DASH-PENDING')->assertSee('RK-DASH-COMPLETED')
-            ->assertSee('Pending')->assertSee('Paid')
-            ->assertSee('<div class="rk-stat-value">2</div>', false)
-            ->assertSee('<div class="rk-stat-value">1</div>', false)
+            ->assertSee('Pesanan aktif')->assertSee('Sedang diproses')->assertSee('Siap diambil')
+            ->assertSee('Menunggu pembayaran')->assertSee('Lunas')
+            ->assertSee('Total pesanan')->assertSee('Pesanan berjalan')
+            ->assertSee('2</strong>', false)->assertSee('1</strong>', false)
             ->assertDontSee('RK-FOREIGN-PRIVATE')
             ->assertDontSee('Belum ada pesanan');
     }
@@ -336,10 +337,18 @@ class StorefrontAuthenticationTest extends TestCase
     public function test_admin_dashboard_uses_the_live_dashboard_view_without_preview_copy(): void
     {
         $user = $this->makeUser('admin');
+        $customerUser = $this->makeUser('customer');
+        $this->makeCustomer($customerUser, 'CUS-ADMIN-DASH');
+        Product::create([
+            'sku' => 'RK-LOW-STOCK-DASH', 'name' => 'Roti stok rendah', 'category' => 'Roti Manis',
+            'price' => 12000, 'stock_qty' => 2, 'is_active' => true,
+        ]);
 
         $this->actingAs($user)->get(route('admin.dashboard'))
             ->assertOk()
             ->assertSee('Total pelanggan')
+            ->assertSee('Stok perlu diperiksa')->assertSee('Roti stok rendah')
+            ->assertSee('Pelanggan terbaru')->assertSee('Customer Test')
             ->assertDontSee('MODE PREVIEW')
             ->assertDontSee('RK-1048');
     }

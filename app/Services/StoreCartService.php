@@ -52,7 +52,7 @@ class StoreCartService
                 'name' => $model->name,
                 'sku' => $model->sku,
                 'description' => $model->description,
-                'image_path' => $model->image_path,
+                'image_path' => $model instanceof Product ? $model->displayImagePath() : $model->image_path,
                 'quantity' => $quantity,
                 'unit_price_cents' => $unitPriceCents,
                 'line_total_cents' => $lineTotalCents,
@@ -83,6 +83,7 @@ class StoreCartService
         }
 
         $now = now();
+
         return Combo::query()
             ->with('items.product')
             ->where('is_active', true)
@@ -127,6 +128,7 @@ class StoreCartService
     public function fromCents(int $cents): string
     {
         $cents = max(0, $cents);
+
         return intdiv($cents, 100).'.'.str_pad((string) ($cents % 100), 2, '0', STR_PAD_LEFT);
     }
 }

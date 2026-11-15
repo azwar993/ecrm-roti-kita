@@ -7,8 +7,8 @@
         <div class="rks-article-grid">
             @foreach($articles as $article)
                 <article class="rks-article-card">
-                    <a href="{{ route('articles.show', $article) }}" class="rks-article-cover">@if($article->cover_path)<img src="{{ asset('storage/'.$article->cover_path) }}" alt="" loading="lazy">@else<span aria-hidden="true">🥐</span>@endif</a>
-                    <div class="rks-article-card-copy"><time datetime="{{ $article->published_at->toDateString() }}">{{ $article->published_at->translatedFormat('d F Y') }}</time><h2><a href="{{ route('articles.show', $article) }}">{{ $article->title }}</a></h2><p>{{ $article->excerpt ?: \Illuminate\Support\Str::limit($article->body, 150) }}</p><a class="rks-text-link" href="{{ route('articles.show', $article) }}">Baca selengkapnya <span aria-hidden="true">→</span></a></div>
+                    <a href="{{ route('articles.show', $article) }}" class="rks-article-cover">@if($article->display_cover_path)<img data-store-image src="{{ asset('storage/'.$article->display_cover_path) }}" alt="{{ $article->cover_alt }}" loading="lazy"><span data-store-image-fallback class="rks-article-brand-tile" aria-hidden="true" hidden>RotiKita Bakery</span>@else<span class="rks-article-brand-tile" aria-hidden="true">RotiKita Bakery</span>@endif</a>
+                    <div class="rks-article-card-copy"><span class="rks-article-category">{{ $article->category }}</span><time datetime="{{ $article->published_at->toDateString() }}">{{ $article->published_at->translatedFormat('d F Y') }}</time><h2><a href="{{ route('articles.show', $article) }}">{{ $article->title }}</a></h2><p>{{ $article->excerpt ?: \Illuminate\Support\Str::limit($article->body, 150) }}</p><a class="rks-text-link" href="{{ route('articles.show', $article) }}">Baca selengkapnya <span aria-hidden="true">→</span></a></div>
                 </article>
             @endforeach
         </div>

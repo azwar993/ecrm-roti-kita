@@ -15,6 +15,22 @@ class ArticlePublishingTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_admin_article_index_explains_missing_schema_instead_of_returning_503(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'is_active' => true]);
+        Schema::dropIfExists('articles');
+
+        $this->actingAs($admin)->get(route('admin.articles.index'))
+            ->assertOk()
+            ->assertSee('migration tabel')
+            ->assertSee('Belum ada artikel');
+
+        $this->actingAs($admin)->get(route('admin.articles.create'))
+            ->assertOk()
+            ->assertSee('penyimpanan dinonaktifkan')
+            ->assertSee('disabled', false);
+    }
+
     public function test_article_metadata_migration_adds_and_reverses_only_its_columns(): void
     {
         $migration = require database_path('migrations/2026_11_03_000001_add_metadata_to_articles_table.php');
@@ -29,6 +45,11 @@ class ArticlePublishingTest extends TestCase
 
     public function test_article_seeder_is_idempotent_and_does_not_overwrite_admin_edits(): void
     {
+        Storage::fake('public');
+        foreach (config('rotikita-article-covers') as $cover) {
+            Storage::disk('public')->put($cover['path'], 'test image content');
+        }
+
         $this->seed(ArticleSeeder::class);
         $expectedArticles = [
             'cara-menyimpan-roti-agar-tetap-lembut' => ['Cara Menyimpan Roti agar Tetap Lembut', 'Tips Bakery'],
@@ -50,18 +71,25 @@ class ArticlePublishingTest extends TestCase
             $this->assertSame(Article::STATUS_PUBLISHED, $seededArticle->status);
             $this->assertNotNull($seededArticle->published_at);
             $this->assertTrue($seededArticle->published_at->lessThanOrEqualTo(now()));
+            $this->assertSame(config("rotikita-article-covers.{$slug}.path"), $seededArticle->cover_path);
+            Storage::disk('public')->assertExists($seededArticle->cover_path);
             $this->get(route('articles.show', $seededArticle))->assertOk()
                 ->assertSee($title)
                 ->assertSee($category)
+                ->assertSee(asset('storage/'.$seededArticle->cover_path), false)
+                ->assertSee($seededArticle->cover_alt, false)
+                ->assertSee('data-store-image-fallback', false)
                 ->assertSee($seededArticle->seo_description, false);
         }
 
         $articleIndex = $this->get(route('articles.index'))->assertOk();
-        foreach ($expectedArticles as [$title]) {
+        foreach ($expectedArticles as $slug => [$title]) {
             $articleIndex->assertSee($title);
+            $articleIndex->assertSee(asset('storage/'.config("rotikita-article-covers.{$slug}.path")), false);
         }
         $homepage = $this->get(route('home'))->assertOk();
         $this->assertSame(3, substr_count($homepage->getContent(), 'Baca selengkapnya'));
+        $this->assertSame(3, substr_count($homepage->getContent(), '/storage/articles/'));
 
         $article = Article::query()->where('slug', 'cara-menyimpan-roti-agar-tetap-lembut')->firstOrFail();
         $article->update(['title' => 'Judul hasil edit admin', 'status' => Article::STATUS_DRAFT]);
@@ -74,6 +102,51 @@ class ArticlePublishingTest extends TestCase
             'title' => 'Judul hasil edit admin',
             'status' => Article::STATUS_DRAFT,
         ]);
+    }
+
+    public function test_article_cover_seeder_preserves_existing_admin_cover(): void
+    {
+        Storage::fake('public');
+        foreach (config('rotikita-article-covers') as $cover) {
+            Storage::disk('public')->put($cover['path'], 'default cover');
+        }
+
+        $this->seed(ArticleSeeder::class);
+        $article = Article::query()->where('slug', 'cara-menyimpan-roti-agar-tetap-lembut')->firstOrFail();
+        $article->update(['cover_path' => 'articles/admin-uploaded-cover.jpg']);
+        Storage::disk('public')->put('articles/admin-uploaded-cover.jpg', 'admin upload');
+
+        $this->seed(ArticleSeeder::class);
+
+        $this->assertSame('articles/admin-uploaded-cover.jpg', $article->fresh()->cover_path);
+        $this->assertSame('admin upload', Storage::disk('public')->get('articles/admin-uploaded-cover.jpg'));
+    }
+
+    public function test_existing_article_without_cover_path_uses_configured_public_cover_by_slug(): void
+    {
+        Storage::fake('public');
+        $cover = config('rotikita-article-covers.cara-menyimpan-roti-agar-tetap-lembut');
+        Storage::disk('public')->put($cover['path'], 'cover image');
+        $article = Article::query()->create([
+            'title' => 'Cara Menyimpan Roti agar Tetap Lembut',
+            'slug' => 'cara-menyimpan-roti-agar-tetap-lembut',
+            'body' => 'Tips menyimpan roti sesuai jenisnya.',
+            'category' => 'Tips Bakery',
+            'status' => Article::STATUS_PUBLISHED,
+            'published_at' => now()->subDay(),
+        ]);
+        Article::query()->create([
+            'title' => 'Artikel penyimpanan lainnya',
+            'slug' => 'artikel-penyimpanan-lainnya',
+            'body' => 'Artikel lain dalam kategori yang sama.',
+            'category' => 'Tips Bakery',
+            'status' => Article::STATUS_PUBLISHED,
+            'published_at' => now()->subDay(),
+        ]);
+
+        $this->assertNull($article->cover_path);
+        $this->assertSame($cover['path'], $article->display_cover_path);
+        $this->assertSame($cover['alt'], $article->cover_alt);
     }
 
     public function test_admin_can_publish_an_article_and_public_pages_only_show_published_content(): void
@@ -147,7 +220,7 @@ class ArticlePublishingTest extends TestCase
         ]);
     }
 
-    public function test_storefront_contact_links_use_only_configured_merchant_values(): void
+    public function test_storefront_uses_confirmed_email_and_hides_unverified_contact_channels(): void
     {
         config()->set('rotikita-contact.email', 'hello@rotikita.example');
         config()->set('rotikita-contact.whatsapp', '+62 812-3456-7890');
@@ -157,21 +230,21 @@ class ArticlePublishingTest extends TestCase
 
         $this->get(route('home'))->assertOk()
             ->assertSee('mailto:hello@rotikita.example', false)
-            ->assertSee('https://wa.me/6281234567890', false)
+            ->assertDontSee('wa.me')
+            ->assertDontSee('Jalan Roti 1, Jakarta')
             ->assertSee('https://instagram.com/rotikita.example', false)
-            ->assertSee('google.com/maps/search/', false)
             ->assertSee('Ikuti Keseruan');
 
-        config()->set('rotikita-contact.email', null);
+        config()->set('rotikita-contact.email', 'RotiKita@gmail.com');
         config()->set('rotikita-contact.whatsapp', null);
         config()->set('rotikita-contact.instagram', null);
         config()->set('rotikita-contact.address', null);
         config()->set('rotikita-contact.opening_hours', null);
 
         $this->get(route('home'))->assertOk()
-            ->assertDontSee('mailto:', false)
+            ->assertSee('mailto:RotiKita@gmail.com', false)
             ->assertDontSee('wa.me/', false)
             ->assertDontSee('instagram.com/', false)
-            ->assertSee('Informasi kontak toko akan ditampilkan');
+            ->assertSee('Akun media sosial resmi belum dikonfigurasi.');
     }
 }

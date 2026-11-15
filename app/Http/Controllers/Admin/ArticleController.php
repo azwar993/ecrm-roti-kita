@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -16,33 +17,36 @@ class ArticleController extends Controller
 {
     public function index(Request $request): View
     {
-        abort_unless(Schema::hasTable('articles'), 503, 'Fitur artikel menunggu migration database.');
-
-        $query = Article::query()->latest('id');
+        $schemaReady = Schema::hasTable('articles');
+        $query = $schemaReady ? Article::query()->latest('id') : null;
         $status = (string) $request->query('status', 'all');
         $search = trim((string) $request->query('q', ''));
 
-        if (in_array($status, [Article::STATUS_DRAFT, Article::STATUS_PUBLISHED], true)) {
+        if ($query && in_array($status, [Article::STATUS_DRAFT, Article::STATUS_PUBLISHED], true)) {
             $query->where('status', $status);
         }
-        if ($search !== '') {
+        if ($query && $search !== '') {
             $query->where(fn ($builder) => $builder
                 ->where('title', 'like', '%'.$search.'%')
                 ->orWhere('slug', 'like', '%'.$search.'%'));
         }
 
         return view('admin.articles', [
-            'articles' => $query->paginate(12)->withQueryString(),
+            'articles' => $query
+                ? $query->paginate(12)->withQueryString()
+                : new LengthAwarePaginator([], 0, 12, 1, ['path' => $request->url()]),
             'status' => $status,
             'search' => $search,
+            'schemaReady' => $schemaReady,
         ]);
     }
 
     public function create(): View
     {
-        abort_unless(Schema::hasTable('articles'), 503, 'Fitur artikel menunggu migration database.');
-
-        return view('admin.article-form', ['article' => new Article]);
+        return view('admin.article-form', [
+            'article' => new Article,
+            'schemaReady' => Schema::hasTable('articles'),
+        ]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -65,7 +69,10 @@ class ArticleController extends Controller
 
     public function edit(Article $article): View
     {
-        return view('admin.article-form', compact('article'));
+        return view('admin.article-form', [
+            'article' => $article,
+            'schemaReady' => true,
+        ]);
     }
 
     public function update(Request $request, Article $article): RedirectResponse

@@ -10,13 +10,18 @@ use App\Models\Payment;
 use App\Models\Product;
 use App\Models\SupportTicket;
 use App\Services\RevenueService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function __invoke(RevenueService $revenue): View
+    public function __invoke(Request $request, RevenueService $revenue): View
     {
+        $today = now();
+        $period = in_array($request->query('period'), ['7', '30'], true) ? (int) $request->query('period') : 7;
+        $chartFrom = $today->copy()->subDays($period - 1)->startOfDay();
+        $chartUntil = $today->copy()->endOfDay();
         $monthStart = now()->startOfMonth();
         $monthEnd = now()->endOfMonth();
         $pendingVerification = Payment::query()->where('status', Payment::STATUS_AWAITING_VERIFICATION);
@@ -28,6 +33,19 @@ class DashboardController extends Controller
 
         return view('admin.dashboard', [
             'customerCount' => Customer::query()->count(),
+            'totalOrders' => Order::query()->count(),
+            'todayRevenue' => $revenue->total($today->copy()->startOfDay(), $today->copy()->endOfDay()),
+            'todayOrderCount' => Order::query()->whereDate('created_at', $today->toDateString())->count(),
+            'revenueChart' => $revenue->dailyTotals($chartFrom, $chartUntil),
+            'revenueChartPeriod' => $period,
+            'orderStatusCounts' => [
+                Order::STATUS_PENDING => Order::query()->where('status', Order::STATUS_PENDING)->count(),
+                Order::STATUS_CONFIRMED => Order::query()->where('status', Order::STATUS_CONFIRMED)->count(),
+                Order::STATUS_PREPARING => Order::query()->where('status', Order::STATUS_PREPARING)->count(),
+                Order::STATUS_READY => Order::query()->where('status', Order::STATUS_READY)->count(),
+                Order::STATUS_COMPLETED => Order::query()->where('status', Order::STATUS_COMPLETED)->count(),
+                Order::STATUS_CANCELLED => Order::query()->where('status', Order::STATUS_CANCELLED)->count(),
+            ],
             'monthOrderCount' => Order::query()->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year)->count(),
             'monthRevenue' => $revenue->total($monthStart, $monthEnd),
             'totalRevenue' => $revenue->total(),
@@ -39,6 +57,9 @@ class DashboardController extends Controller
             'unresolvedFeedbackCount' => Feedback::query()->whereIn('status', [Feedback::STATUS_NEW, Feedback::STATUS_IN_PROGRESS])->count(),
             'pendingOrders' => Order::query()->whereIn('status', [Order::STATUS_PENDING, Order::STATUS_CONFIRMED, Order::STATUS_PREPARING, Order::STATUS_READY])->count(),
             'lowStockCount' => Product::query()->where('is_active', true)->where('stock_qty', '<=', 5)->count(),
+            'lowStockProducts' => Product::query()->where('is_active', true)->where('stock_qty', '<=', 5)
+                ->orderBy('stock_qty')->limit(5)->get(['id', 'sku', 'name', 'stock_qty', 'image_path']),
+            'recentCustomers' => Customer::query()->withCount('orders')->latest('id')->limit(5)->get(),
             'recentOrders' => Order::query()->with(['customer', 'items', 'payment'])->latest('id')->limit(5)->get(),
             'monthActiveCustomers' => $buyers,
             'monthRepeatPurchaseRate' => $buyers > 0 ? round($repeatBuyers / $buyers * 100, 1) : 0,
